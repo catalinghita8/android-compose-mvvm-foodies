@@ -9,13 +9,13 @@ class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodM
     val viewState: MutableStateFlow<FoodMenuState> = MutableStateFlow(FoodMenuState())
 
     suspend fun getFoodCategories() {
-        viewState.value = viewState.value.copy(loadingStatus = true)
+        viewState.value = viewState.value.copy(isLoading = true)
         val categories = repository.getFoodCategories()
-        viewState.value = viewState.value.copy(categories = categories, loadingStatus = false)
+        viewState.value = viewState.value.copy(categories = categories, isLoading = false)
     }
 }
 
 data class FoodMenuState(
-    val loadingStatus: Boolean = false,
+    val isLoading: Boolean = false,
     val categories: List<FoodCategory> = listOf()
 )
