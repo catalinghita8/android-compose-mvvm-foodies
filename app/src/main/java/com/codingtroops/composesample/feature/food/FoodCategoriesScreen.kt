@@ -1,8 +1,5 @@
 package com.codingtroops.composesample.feature.food
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,20 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.codingtroops.composesample.model.response.FoodCategory
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 
-class MainActivity : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            ComposeSampleTheme {
-                FoodCategoriesScreen(viewModel = FoodMenuViewModel())
-            }
-        }
-    }
-}
-
 @Composable
-fun FoodCategoriesScreen(viewModel: FoodMenuViewModel) {
+fun FoodCategoriesScreen(viewModel: FoodCategoriesViewModel) {
     Surface(color = MaterialTheme.colors.background) {
         LaunchedEffect(ONE_TIME_EFFECT_GET_FOOD_CATEGORIES) {
             viewModel.getFoodCategories()
@@ -73,7 +58,7 @@ fun LoadingBar() {
 @Composable
 fun DefaultPreview() {
     ComposeSampleTheme {
-        FoodCategoriesScreen(FoodMenuViewModel())
+        FoodCategoriesScreen(FoodCategoriesViewModel())
     }
 }
 

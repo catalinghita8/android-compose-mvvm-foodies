@@ -4,7 +4,7 @@ import com.codingtroops.composesample.model.data.FoodMenuRepository
 import com.codingtroops.composesample.model.response.FoodCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FoodMenuViewModel(private val repository: FoodMenuRepository = FoodMenuRepository()) {
+class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodMenuRepository()) {
 
     val viewState: MutableStateFlow<FoodMenuState> = MutableStateFlow(FoodMenuState())
 
