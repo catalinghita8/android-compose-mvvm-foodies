@@ -59,7 +59,6 @@ fun FoodCategoryRow(category: FoodCategory) {
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
     ) {
         var expanded by remember { mutableStateOf(false) }
-
         Row(
             modifier = Modifier
                 .animateContentSize()
