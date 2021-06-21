@@ -14,21 +14,21 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.codingtroops.composesample.R
+import com.codingtroops.composesample.feature.entry.AppNavigationController
 import com.codingtroops.composesample.model.response.FoodCategory
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import com.google.accompanist.coil.rememberCoilPainter
-import kotlin.math.exp
 
 @Composable
-fun FoodCategoriesScreen(viewModel: FoodCategoriesViewModel) {
+fun FoodCategoriesScreen(
+    viewModel: FoodCategoriesViewModel,
+    navigationController: AppNavigationController
+) {
     Surface(color = MaterialTheme.colors.background) {
         LaunchedEffect(ONE_TIME_EFFECT_GET_FOOD_CATEGORIES) {
             viewModel.getFoodCategories()
@@ -36,27 +36,30 @@ fun FoodCategoriesScreen(viewModel: FoodCategoriesViewModel) {
         val state = viewModel.viewState.collectAsState().value
         if (state.isLoading)
             LoadingBar()
-        FoodCategories(categories = state.categories)
+        FoodCategories(state.categories, navigationController)
     }
 }
 
 @Composable
-fun FoodCategories(categories: List<FoodCategory>) {
+fun FoodCategories(categories: List<FoodCategory>, navigationController: AppNavigationController) {
     LazyColumn {
-        items(categories) {
-            FoodCategoryRow(it)
+        items(categories) { category ->
+            FoodCategoryRow(category, navigationController)
         }
     }
 }
 
 @Composable
-fun FoodCategoryRow(category: FoodCategory) {
+fun FoodCategoryRow(category: FoodCategory, navigationController: AppNavigationController) {
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.surface,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+            .clickable {
+                navigationController.navigateToCategoryDetails(category.name)
+            }
     ) {
         var expanded by remember { mutableStateOf(false) }
         Row(
@@ -153,8 +156,9 @@ fun LoadingBar() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
+    val appNavigationController = AppNavigationController(null)
     ComposeSampleTheme {
-        FoodCategoriesScreen(FoodCategoriesViewModel())
+        FoodCategoriesScreen(FoodCategoriesViewModel(), appNavigationController)
     }
 }
 
