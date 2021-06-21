@@ -33,6 +33,7 @@ import coil.transform.CircleCropTransformation
 import com.google.accompanist.coil.rememberCoilPainter
 import java.lang.Float.min
 
+// TODO add separate package for it and then finish screen
 @Composable
 fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel, categoryName: String) {
 //    val scrollState = rememberScrollState()
