@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.codingtroops.composesample.feature.category.FoodCategoryViewModelFactory
 import com.codingtroops.composesample.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_NAME
 import com.codingtroops.composesample.feature.food.FoodCategoriesScreen
 import com.codingtroops.composesample.feature.food.FoodCategoriesViewModel
@@ -37,7 +39,7 @@ private fun FoodApp() {
     NavHost(navController, startDestination = NavigationKeys.Route.FOOD_CATEGORIES_LIST) {
         composable(route = NavigationKeys.Route.FOOD_CATEGORIES_LIST) {
             FoodCategoriesScreen(
-                viewModel = FoodCategoriesViewModel(),
+                viewModel = viewModel(),
                 navigationController = appNavigationController
             )
         }
@@ -47,7 +49,11 @@ private fun FoodApp() {
                 type = NavType.StringType
             })
         ) { backStackEntry ->
-            FoodCategoryDetailsScreen(backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_NAME)!!)
+            val categoryName =
+                backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_NAME)!!
+            FoodCategoryDetailsScreen(
+                viewModel(factory = FoodCategoryViewModelFactory(categoryName)), categoryName
+            )
         }
     }
 }

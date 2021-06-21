@@ -30,9 +30,6 @@ fun FoodCategoriesScreen(
     navigationController: AppNavigationController
 ) {
     Surface(color = MaterialTheme.colors.background) {
-        LaunchedEffect(ONE_TIME_EFFECT_GET_FOOD_CATEGORIES) {
-            viewModel.getFoodCategories()
-        }
         val state = viewModel.viewState.collectAsState().value
         if (state.isLoading)
             LoadingBar()
