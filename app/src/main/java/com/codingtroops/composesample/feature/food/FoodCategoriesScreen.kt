@@ -66,47 +66,11 @@ fun FoodCategoryRow(category: FoodCategory) {
                     expanded = !expanded
                 }
         ) {
-            Image(
-                painter = rememberCoilPainter(
-                    request = category.thumbnailUrl
-                ),
-                modifier = Modifier
-                    .size(88.dp)
-                    .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
-                    .align(alignment = Alignment.CenterVertically),
-                contentDescription = "Food category thumbnail picture",
-            )
-            Column(
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        end = 8.dp,
-                        top = 24.dp,
-                        bottom = 24.dp
-                    )
-                    .fillMaxWidth(0.80f)
-            ) {
-                Text(
-                    text = category.name,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h6
-                )
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text(
-                        text = category.description.trim(),
-                        textAlign = TextAlign.Start,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.subtitle2,
-                        maxLines = if (expanded) 10 else 2
-                    )
-                }
+            Box(modifier = Modifier.align(alignment = Alignment.CenterVertically)) {
+                FoodCategoryThumbnail(category.thumbnailUrl)
             }
-            Icon(
-                imageVector = if (expanded)
-                    Icons.Filled.KeyboardArrowUp
-                else
-                    Icons.Filled.KeyboardArrowDown,
-                contentDescription = "Expand row icon",
+            FoodCategoryDetails(category, expanded)
+            Box(
                 modifier = Modifier
                     .align(
                         if (expanded)
@@ -114,11 +78,73 @@ fun FoodCategoryRow(category: FoodCategory) {
                         else
                             Alignment.CenterVertically
                     )
-                    .fillMaxHeight()
-                    .padding(start = 8.dp, end = 16.dp, bottom = if (expanded) 16.dp else 0.dp)
+            ) {
+                ExpandableContentIcon(expanded)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExpandableContentIcon(expanded: Boolean) {
+    Icon(
+        imageVector = if (expanded)
+            Icons.Filled.KeyboardArrowUp
+        else
+            Icons.Filled.KeyboardArrowDown,
+        contentDescription = "Expand row icon",
+        modifier = Modifier
+            .padding(
+                start = 8.dp,
+                end = 16.dp,
+                bottom = if (expanded) 16.dp else 0.dp
+            )
+    )
+}
+
+@Composable
+private fun FoodCategoryDetails(
+    category: FoodCategory,
+    expanded: Boolean
+) {
+    Column(
+        modifier = Modifier
+            .padding(
+                start = 16.dp,
+                end = 8.dp,
+                top = 24.dp,
+                bottom = 24.dp
+            )
+            .fillMaxWidth(0.80f)
+    ) {
+        Text(
+            text = category.name,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h6
+        )
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(
+                text = category.description.trim(),
+                textAlign = TextAlign.Start,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.subtitle2,
+                maxLines = if (expanded) 10 else 2
             )
         }
     }
+}
+
+@Composable
+private fun FoodCategoryThumbnail(thumbnailUrl: String) {
+    Image(
+        painter = rememberCoilPainter(
+            request = thumbnailUrl
+        ),
+        modifier = Modifier
+            .size(88.dp)
+            .padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+        contentDescription = "Food category thumbnail picture",
+    )
 }
 
 @Composable
