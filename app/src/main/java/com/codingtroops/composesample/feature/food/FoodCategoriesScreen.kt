@@ -60,11 +60,7 @@ fun FoodCategoryRow(category: FoodCategory) {
     ) {
         var expanded by remember { mutableStateOf(false) }
         Row(
-            modifier = Modifier
-                .animateContentSize()
-                .noRippleClickable {
-                    expanded = !expanded
-                }
+            modifier = Modifier.animateContentSize(),
         ) {
             Box(modifier = Modifier.align(alignment = Alignment.CenterVertically)) {
                 FoodCategoryThumbnail(category.thumbnailUrl)
@@ -78,6 +74,7 @@ fun FoodCategoryRow(category: FoodCategory) {
                         else
                             Alignment.CenterVertically
                     )
+                    .noRippleClickable { expanded = !expanded }
             ) {
                 ExpandableContentIcon(expanded)
             }
@@ -94,11 +91,7 @@ private fun ExpandableContentIcon(expanded: Boolean) {
             Icons.Filled.KeyboardArrowDown,
         contentDescription = "Expand row icon",
         modifier = Modifier
-            .padding(
-                start = 8.dp,
-                end = 16.dp,
-                bottom = if (expanded) 16.dp else 0.dp
-            )
+            .padding(all = 16.dp)
     )
 }
 
