@@ -128,7 +128,7 @@ private fun FoodCategoryDetails(
 }
 
 @Composable
-private fun FoodCategoryThumbnail(thumbnailUrl: String) {
+fun FoodCategoryThumbnail(thumbnailUrl: String) {
     Image(
         painter = rememberCoilPainter(
             request = thumbnailUrl
