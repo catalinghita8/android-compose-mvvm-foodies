@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.feature.food
+package com.codingtroops.composesample.feature.category
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
@@ -11,19 +11,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.codingtroops.composesample.feature.category.FoodCategoryDetailsViewModel
-import com.codingtroops.composesample.feature.category.FoodCategoryViewModelFactory
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.max
 import coil.transform.CircleCropTransformation
@@ -32,10 +26,7 @@ import java.lang.Float.min
 
 // TODO add separate package for it and then finish screen
 @Composable
-fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel, categoryName: String) {
-//    val scrollState = rememberScrollState()
-//    val offset = min(1f, 1 - (scrollState.value / 600f))
-
+fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel) {
     var profilePictureState by remember { mutableStateOf(FoodCategoryProfileState.Normal) }
     val transition = updateTransition(targetState = profilePictureState, label = "")
     val color by transition.animateColor(targetValueByState = { state -> state.color }, label = "")
@@ -44,6 +35,8 @@ fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel, categoryN
         targetValueByState = { state -> state.borderSize },
         label = ""
     )
+
+    val state = viewModel.viewState.collectAsState().value
 
     Column {
         Card(
@@ -57,7 +50,7 @@ fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel, categoryN
         ) {
             Image(
                 painter = rememberCoilPainter(
-                    request = "https:\\/\\/www.themealdb.com\\/images\\/media\\/meals\\/1548772327.jpg",
+                    request = state.category?.thumbnailUrl,
                     requestBuilder = {
                         transformations(CircleCropTransformation())
                     },
@@ -107,6 +100,6 @@ private enum class FoodCategoryProfileState(val color: Color, val size: Dp, val 
 @Composable
 fun FoodCategoryDetailsDefaultPreview() {
     ComposeSampleTheme {
-        FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory("Lamb")), "Lamb")
+        FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory("Lamb")), categoryName = "Lamb")
     }
 }

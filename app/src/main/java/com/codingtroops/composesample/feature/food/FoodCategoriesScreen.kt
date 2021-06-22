@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.codingtroops.composesample.base.ViewEvent
 import com.codingtroops.composesample.model.response.FoodCategory
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
@@ -27,7 +26,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 
 @Composable
 fun FoodCategoriesScreen(
-    state: FoodCategoriesContract.FoodMenuState,
+    state: FoodCategoriesContract.State,
     onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
 ) {
     Surface(color = MaterialTheme.colors.background) {
@@ -60,7 +59,7 @@ fun FoodCategoryRow(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
             .clickable {
-                onCategoryClick(FoodCategoriesContract.Event.CategorySelection(category.name))
+                onCategoryClick(FoodCategoriesContract.Event.CategorySelection(category.id))
             }
     ) {
         var expanded by remember { mutableStateOf(false) }
@@ -159,6 +158,6 @@ fun LoadingBar() {
 @Composable
 fun DefaultPreview() {
     ComposeSampleTheme {
-        FoodCategoriesScreen(FoodCategoriesContract.FoodMenuState()) { }
+        FoodCategoriesScreen(FoodCategoriesContract.State()) { }
     }
 }

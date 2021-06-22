@@ -10,7 +10,7 @@ class FoodCategoriesContract {
         data class CategorySelection(val categoryName: String) : Event()
     }
 
-    data class FoodMenuState(
+    data class State(
         val categories: List<FoodCategory> = listOf()
     ) : ViewState()
 

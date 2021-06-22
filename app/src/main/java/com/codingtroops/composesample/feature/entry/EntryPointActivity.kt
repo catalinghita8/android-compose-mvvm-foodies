@@ -6,18 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.codingtroops.composesample.feature.category.FoodCategoryDetailsScreen
 import com.codingtroops.composesample.feature.category.FoodCategoryViewModelFactory
-import com.codingtroops.composesample.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_NAME
+import com.codingtroops.composesample.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
 import com.codingtroops.composesample.feature.food.FoodCategoriesContract
 import com.codingtroops.composesample.feature.food.FoodCategoriesScreen
 import com.codingtroops.composesample.feature.food.FoodCategoriesViewModel
-import com.codingtroops.composesample.feature.food.FoodCategoryDetailsScreen
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 
 // Single Activity per app
@@ -43,9 +42,7 @@ private fun FoodApp() {
             val state = viewModel.viewState.collectAsState().value
             FoodCategoriesScreen(
                 state = state,
-            ) { event ->
-                viewModel.setEvent(event)
-            }
+            ) { event -> viewModel.setEvent(event) }
 
             val effect = viewModel.effect.collectAsState(null).value
             when (effect) {
@@ -56,15 +53,12 @@ private fun FoodApp() {
         }
         composable(
             route = NavigationKeys.Route.FOOD_CATEGORY_DETAILS,
-            arguments = listOf(navArgument(NavigationKeys.Arg.FOOD_CATEGORY_NAME) {
+            arguments = listOf(navArgument(NavigationKeys.Arg.FOOD_CATEGORY_ID) {
                 type = NavType.StringType
             })
         ) { backStackEntry ->
-            val categoryName =
-                backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_NAME)!!
-            FoodCategoryDetailsScreen(
-                viewModel(factory = FoodCategoryViewModelFactory(categoryName)), categoryName
-            )
+            val categoryId = backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_ID)!!
+            FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory(categoryId)))
         }
     }
 }
@@ -72,12 +66,12 @@ private fun FoodApp() {
 object NavigationKeys {
 
     object Arg {
-        const val FOOD_CATEGORY_NAME = "foodCategoryName"
+        const val FOOD_CATEGORY_ID = "foodCategoryName"
     }
 
     object Route {
         const val FOOD_CATEGORIES_LIST = "food_categories_list"
-        const val FOOD_CATEGORY_DETAILS = "$FOOD_CATEGORIES_LIST/{$FOOD_CATEGORY_NAME}"
+        const val FOOD_CATEGORY_DETAILS = "$FOOD_CATEGORIES_LIST/{$FOOD_CATEGORY_ID}"
     }
 
 }

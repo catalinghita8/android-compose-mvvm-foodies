@@ -5,8 +5,8 @@ import com.codingtroops.composesample.base.BaseViewModel
 import com.codingtroops.composesample.model.data.FoodMenuRepository
 import kotlinx.coroutines.launch
 
-class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodMenuRepository()) :
-    BaseViewModel<FoodCategoriesContract.Event, FoodCategoriesContract.FoodMenuState, FoodCategoriesContract.Effect>() {
+class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodMenuRepository.instance) :
+    BaseViewModel<FoodCategoriesContract.Event, FoodCategoriesContract.State, FoodCategoriesContract.Effect>() {
 
     init {
         viewModelScope.launch {
@@ -15,7 +15,7 @@ class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodM
     }
 
     override fun setInitialState() =
-        FoodCategoriesContract.FoodMenuState(categories = listOf()).apply { setIsLoading(true) }
+        FoodCategoriesContract.State(categories = listOf()).apply { setIsLoading(true) }
 
     override fun handleEvents(event: FoodCategoriesContract.Event) {
         when (event) {

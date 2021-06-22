@@ -8,5 +8,5 @@ data class FoodCategory(
     @SerializedName("idCategory") val id: String,
     @SerializedName("strCategory") val name: String,
     @SerializedName("strCategoryThumb") val thumbnailUrl: String,
-    @SerializedName("strCategoryDescription") val description: String
+    @SerializedName("strCategoryDescription") val description: String = ""
 )
