@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
-import androidx.compose.material.Colors
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codingtroops.composesample.feature.category.FoodCategoryDetailsViewModel
 import com.codingtroops.composesample.feature.category.FoodCategoryViewModelFactory
-import com.codingtroops.composesample.feature.entry.AppNavigationController
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue

@@ -18,36 +18,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.codingtroops.composesample.feature.entry.AppNavigationController
+import com.codingtroops.composesample.base.ViewEvent
 import com.codingtroops.composesample.model.response.FoodCategory
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import com.google.accompanist.coil.rememberCoilPainter
 
+
 @Composable
 fun FoodCategoriesScreen(
-    viewModel: FoodCategoriesViewModel,
-    navigationController: AppNavigationController
+    state: FoodCategoriesContract.FoodMenuState,
+    onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
 ) {
     Surface(color = MaterialTheme.colors.background) {
-        val state = viewModel.viewState.collectAsState().value
         if (state.isLoading)
             LoadingBar()
-        FoodCategories(state.categories, navigationController)
+        FoodCategoriesList(state.categories, onCategoryClick)
     }
 }
 
 @Composable
-fun FoodCategories(categories: List<FoodCategory>, navigationController: AppNavigationController) {
+fun FoodCategoriesList(
+    categories: List<FoodCategory>,
+    onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
+) {
     LazyColumn {
         items(categories) { category ->
-            FoodCategoryRow(category, navigationController)
+            FoodCategoryRow(category, onCategoryClick)
         }
     }
 }
 
 @Composable
-fun FoodCategoryRow(category: FoodCategory, navigationController: AppNavigationController) {
+fun FoodCategoryRow(
+    category: FoodCategory, onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
+) {
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.surface,
@@ -55,7 +60,7 @@ fun FoodCategoryRow(category: FoodCategory, navigationController: AppNavigationC
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
             .clickable {
-                navigationController.navigateToCategoryDetails(category.name)
+                onCategoryClick(FoodCategoriesContract.Event.CategorySelection(category.name))
             }
     ) {
         var expanded by remember { mutableStateOf(false) }
@@ -153,10 +158,7 @@ fun LoadingBar() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    val appNavigationController = AppNavigationController(null)
     ComposeSampleTheme {
-        FoodCategoriesScreen(FoodCategoriesViewModel(), appNavigationController)
+        FoodCategoriesScreen(FoodCategoriesContract.FoodMenuState()) { }
     }
 }
-
-const val ONE_TIME_EFFECT_GET_FOOD_CATEGORIES = "get-categories"

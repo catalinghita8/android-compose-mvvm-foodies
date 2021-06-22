@@ -2,6 +2,7 @@ package com.codingtroops.composesample.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -15,7 +16,10 @@ abstract class ViewState(var isLoading: Boolean = false) {
 
 interface ViewEvent
 
-abstract class BaseViewModel<Event : ViewEvent, State : ViewState> : ViewModel() {
+interface ViewSideEffect
+
+abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : ViewSideEffect> :
+    ViewModel() {
 
     private val initialState: State by lazy { setInitialState() }
 
@@ -28,7 +32,9 @@ abstract class BaseViewModel<Event : ViewEvent, State : ViewState> : ViewModel()
     val viewState = _uiState.asStateFlow()
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
-    val eventsFlow = _event.asSharedFlow()
+
+    private val _effect: Channel<Effect> = Channel()
+    val effect = _effect.receiveAsFlow()
 
     init {
         subscribeToEvents()
@@ -45,12 +51,17 @@ abstract class BaseViewModel<Event : ViewEvent, State : ViewState> : ViewModel()
 
     private fun subscribeToEvents() {
         viewModelScope.launch {
-            eventsFlow.collect {
-                handleEvent(it)
+            _event.collect {
+                handleEvents(it)
             }
         }
     }
 
-    abstract fun handleEvent(event: Event)
+    abstract fun handleEvents(event: Event)
+
+    protected fun setEffect(builder: () -> Effect) {
+        val effectValue = builder()
+        viewModelScope.launch { _effect.send(effectValue) }
+    }
 
 }

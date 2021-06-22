@@ -6,7 +6,7 @@ import com.codingtroops.composesample.model.data.FoodMenuRepository
 import kotlinx.coroutines.launch
 
 class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodMenuRepository()) :
-    BaseViewModel<FoodCategoriesContract.Event, FoodCategoriesContract.FoodMenuState>() {
+    BaseViewModel<FoodCategoriesContract.Event, FoodCategoriesContract.FoodMenuState, FoodCategoriesContract.Effect>() {
 
     init {
         viewModelScope.launch {
@@ -15,9 +15,14 @@ class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodM
     }
 
     override fun setInitialState() =
-        FoodCategoriesContract.FoodMenuState(categories = listOf()).also { it.isLoading = true }
+        FoodCategoriesContract.FoodMenuState(categories = listOf()).apply { setIsLoading(true) }
 
-    override fun handleEvent(event: FoodCategoriesContract.Event) {
+    override fun handleEvents(event: FoodCategoriesContract.Event) {
+        when (event) {
+            is FoodCategoriesContract.Event.CategorySelection -> {
+                setEffect { FoodCategoriesContract.Effect.CategoryDetailsNavigation(event.categoryName) }
+            }
+        }
     }
 
     private suspend fun getFoodCategories() {
