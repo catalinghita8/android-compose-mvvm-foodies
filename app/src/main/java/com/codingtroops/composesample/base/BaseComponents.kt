@@ -6,7 +6,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-const val LAUNCH_LISTEN_TO_EFFECTS = "launch-listen-to-effects"
+const val LAUNCH_LISTEN_FOR_EFFECTS = "launch-listen-to-effects"
 
 abstract class ViewState(var isLoading: Boolean = false) {
     fun <State : ViewState> State.setIsLoading(value: Boolean): State {
