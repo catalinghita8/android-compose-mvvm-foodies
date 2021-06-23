@@ -15,7 +15,11 @@ class FoodCategoriesContract {
     ) : ViewState()
 
     sealed class Effect : ViewSideEffect {
-        data class CategoryDetailsNavigation(val categoryName: String) : Effect()
+        object ToastDataWasLoaded : Effect()
+
+        sealed class Navigation : Effect() {
+            data class ToCategoryDetails(val categoryName: String) : Navigation()
+        }
     }
 
 }

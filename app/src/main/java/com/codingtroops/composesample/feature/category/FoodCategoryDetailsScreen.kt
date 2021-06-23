@@ -100,6 +100,6 @@ private enum class FoodCategoryProfileState(val color: Color, val size: Dp, val 
 @Composable
 fun FoodCategoryDetailsDefaultPreview() {
     ComposeSampleTheme {
-        FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory("Lamb")), categoryName = "Lamb")
+        FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory("Lamb")))
     }
 }

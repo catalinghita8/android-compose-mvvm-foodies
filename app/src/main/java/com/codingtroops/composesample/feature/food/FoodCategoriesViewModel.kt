@@ -20,7 +20,7 @@ class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodM
     override fun handleEvents(event: FoodCategoriesContract.Event) {
         when (event) {
             is FoodCategoriesContract.Event.CategorySelection -> {
-                setEffect { FoodCategoriesContract.Effect.CategoryDetailsNavigation(event.categoryName) }
+                setEffect { FoodCategoriesContract.Effect.Navigation.ToCategoryDetails(event.categoryName) }
             }
         }
     }
@@ -31,6 +31,7 @@ class FoodCategoriesViewModel(private val repository: FoodMenuRepository = FoodM
         setState {
             copy(categories = categories).setIsLoading(false)
         }
+        setEffect { FoodCategoriesContract.Effect.ToastDataWasLoaded }
     }
 
 }

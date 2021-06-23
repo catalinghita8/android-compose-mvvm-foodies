@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,8 @@ import com.codingtroops.composesample.feature.food.FoodCategoriesContract
 import com.codingtroops.composesample.feature.food.FoodCategoriesScreen
 import com.codingtroops.composesample.feature.food.FoodCategoriesViewModel
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 // Single Activity per app
 class EntryPointActivity : ComponentActivity() {
@@ -42,14 +45,13 @@ private fun FoodApp() {
             val state = viewModel.viewState.collectAsState().value
             FoodCategoriesScreen(
                 state = state,
-            ) { event -> viewModel.setEvent(event) }
-
-            val effect = viewModel.effect.collectAsState(null).value
-            when (effect) {
-                is FoodCategoriesContract.Effect.CategoryDetailsNavigation -> {
-                    navController.navigate("${NavigationKeys.Route.FOOD_CATEGORIES_LIST}/${effect.categoryName}")
-                }
-            }
+                effectFlow = viewModel.effect,
+                onEventSent = { event -> viewModel.setEvent(event) },
+                onNavigationRequested = { navigationEffect ->
+                    if (navigationEffect is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails) {
+                        navController.navigate("${NavigationKeys.Route.FOOD_CATEGORIES_LIST}/${navigationEffect.categoryName}")
+                    }
+                })
         }
         composable(
             route = NavigationKeys.Route.FOOD_CATEGORY_DETAILS,
@@ -57,7 +59,8 @@ private fun FoodApp() {
                 type = NavType.StringType
             })
         ) { backStackEntry ->
-            val categoryId = backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_ID)!!
+            val categoryId =
+                backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_ID)!!
             FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory(categoryId)))
         }
     }

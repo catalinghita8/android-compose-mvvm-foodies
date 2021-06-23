@@ -1,5 +1,6 @@
 package com.codingtroops.composesample.feature.food
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -14,25 +15,44 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.codingtroops.composesample.base.LAUNCH_LISTEN_TO_EFFECTS
 import com.codingtroops.composesample.model.response.FoodCategory
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import com.google.accompanist.coil.rememberCoilPainter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 
 @Composable
 fun FoodCategoriesScreen(
     state: FoodCategoriesContract.State,
-    onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
+    effectFlow: Flow<FoodCategoriesContract.Effect>?,
+    onEventSent: (event: FoodCategoriesContract.Event) -> Unit,
+    onNavigationRequested: (navigationEffect: FoodCategoriesContract.Effect.Navigation) -> Unit
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(LAUNCH_LISTEN_TO_EFFECTS) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is FoodCategoriesContract.Effect.ToastDataWasLoaded ->
+                    Toast.makeText(context, "Food categories are loaded.", Toast.LENGTH_LONG).show()
+                is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails -> onNavigationRequested(
+                    effect
+                )
+            }
+        }?.collect()
+    }
     Surface(color = MaterialTheme.colors.background) {
         if (state.isLoading)
             LoadingBar()
-        FoodCategoriesList(state.categories, onCategoryClick)
+        FoodCategoriesList(state.categories, onEventSent)
     }
 }
 
@@ -158,6 +178,6 @@ fun LoadingBar() {
 @Composable
 fun DefaultPreview() {
     ComposeSampleTheme {
-        FoodCategoriesScreen(FoodCategoriesContract.State()) { }
+        FoodCategoriesScreen(FoodCategoriesContract.State(), null, { }, { })
     }
 }
