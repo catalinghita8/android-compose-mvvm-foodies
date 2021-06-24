@@ -56,7 +56,9 @@ fun FoodCategoriesScreen(
         Surface(color = MaterialTheme.colors.background) {
             if (state.isLoading)
                 LoadingBar()
-            FoodCategoriesList(state.categories, onEventSent)
+            FoodCategoriesList(state.categories) { itemId ->
+                onEventSent(FoodCategoriesContract.Event.CategorySelection(itemId))
+            }
         }
     }
 
@@ -65,18 +67,18 @@ fun FoodCategoriesScreen(
 @Composable
 fun FoodCategoriesList(
     categories: List<FoodCategory>,
-    onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
+    onItemClicked: (id: String) -> Unit
 ) {
     LazyColumn {
         items(categories) { category ->
-            FoodCategoryRow(category, onCategoryClick)
+            FoodCategoryRow(category, onItemClicked)
         }
     }
 }
 
 @Composable
 fun FoodCategoryRow(
-    category: FoodCategory, onCategoryClick: (event: FoodCategoriesContract.Event) -> Unit
+    category: FoodCategory, onItemClicked: (id: String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -84,9 +86,7 @@ fun FoodCategoryRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .clickable {
-                onCategoryClick(FoodCategoriesContract.Event.CategorySelection(category.id))
-            }
+            .clickable { onItemClicked(category.id) }
     ) {
         var expanded by remember { mutableStateOf(false) }
         Row(
