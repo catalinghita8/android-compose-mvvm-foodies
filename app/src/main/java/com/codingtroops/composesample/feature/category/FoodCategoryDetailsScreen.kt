@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,11 +22,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.max
+import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import com.codingtroops.composesample.feature.food.FoodCategoriesList
 import com.google.accompanist.coil.rememberCoilPainter
 import java.lang.Float.min
 
-// TODO add separate package for it and then finish screen
+// TODO finish screen
+// TODO extract state
 @Composable
 fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel) {
     var profilePictureState by remember { mutableStateOf(FoodCategoryProfileState.Normal) }
@@ -37,57 +42,42 @@ fun FoodCategoryDetailsScreen(viewModel: FoodCategoryDetailsViewModel) {
     )
 
     val state = viewModel.viewState.collectAsState().value
-
-    Column {
-        Card(
-            modifier = Modifier.padding(16.dp),
-            shape = CircleShape,
-            border = BorderStroke(
-                width = borderValue,
-                color = color
-            ),
-            elevation = 4.dp
-        ) {
-            Image(
-                painter = rememberCoilPainter(
-                    request = state.category?.thumbnailUrl,
-                    requestBuilder = {
-                        transformations(CircleCropTransformation())
-                    },
+    Surface(color = MaterialTheme.colors.background) {
+        Column {
+            Card(
+                modifier = Modifier.padding(16.dp),
+                shape = CircleShape,
+                border = BorderStroke(
+                    width = borderValue,
+                    color = color
                 ),
-                modifier = Modifier.size(size),
-                contentDescription = "Food category thumbnail picture",
-            )
-        }
-        Button(onClick = {
-            profilePictureState = if (profilePictureState == FoodCategoryProfileState.Normal)
-                FoodCategoryProfileState.Expanded
-            else
-                FoodCategoryProfileState.Normal
-        }, modifier = Modifier.padding(16.dp)) { }
-        Column(
-            //modifier = Modifier.verticalScroll(scrollState)
-        ) {
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
-            Button(onClick = {}, modifier = Modifier.padding(16.dp), content = { })
+                elevation = 4.dp
+            ) {
+                Image(
+                    painter = rememberCoilPainter(
+                        request = state.category?.thumbnailUrl,
+                        requestBuilder = {
+                            transformations(CircleCropTransformation())
+                        },
+                    ),
+                    modifier = Modifier.size(size),
+                    contentDescription = "Food category thumbnail picture",
+                )
+            }
+            Button(onClick = {
+                profilePictureState = if (profilePictureState == FoodCategoryProfileState.Normal)
+                    FoodCategoryProfileState.Expanded
+                else
+                    FoodCategoryProfileState.Normal
+            }, modifier = Modifier.padding(16.dp)) { }
+
+            FoodCategoriesList(
+                foodItems = state.categoryFoodItems,
+                iconTransformationBuilder = { transformations(CircleCropTransformation()) }
+            ) { }
         }
     }
+
 }
 
 

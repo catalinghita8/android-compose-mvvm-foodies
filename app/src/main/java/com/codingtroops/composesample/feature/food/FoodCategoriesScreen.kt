@@ -17,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import coil.request.ImageRequest
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
-import com.codingtroops.composesample.model.response.FoodCategory
+import com.codingtroops.composesample.model.FoodItem
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import com.google.accompanist.coil.rememberCoilPainter
@@ -56,7 +58,7 @@ fun FoodCategoriesScreen(
         Surface(color = MaterialTheme.colors.background) {
             if (state.isLoading)
                 LoadingBar()
-            FoodCategoriesList(state.categories) { itemId ->
+            FoodCategoriesList(foodItems = state.categories, itemShouldExpand = true) { itemId ->
                 onEventSent(FoodCategoriesContract.Event.CategorySelection(itemId))
             }
         }
@@ -66,19 +68,24 @@ fun FoodCategoriesScreen(
 
 @Composable
 fun FoodCategoriesList(
-    categories: List<FoodCategory>,
+    foodItems: List<FoodItem>,
+    itemShouldExpand: Boolean = false,
+    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     onItemClicked: (id: String) -> Unit
 ) {
     LazyColumn {
-        items(categories) { category ->
-            FoodCategoryRow(category, onItemClicked)
+        items(foodItems) { item ->
+            FoodItemRow(item, itemShouldExpand, iconTransformationBuilder, onItemClicked)
         }
     }
 }
 
 @Composable
-fun FoodCategoryRow(
-    category: FoodCategory, onItemClicked: (id: String) -> Unit
+fun FoodItemRow(
+    item: FoodItem,
+    itemShouldExpand: Boolean,
+    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
+    onItemClicked: (id: String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -86,28 +93,29 @@ fun FoodCategoryRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .clickable { onItemClicked(category.id) }
+            .clickable { onItemClicked(item.id) }
     ) {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier.animateContentSize(),
         ) {
             Box(modifier = Modifier.align(alignment = Alignment.CenterVertically)) {
-                FoodCategoryThumbnail(category.thumbnailUrl)
+                FoodItemThumbnail(item.thumbnailUrl, iconTransformationBuilder)
             }
-            FoodCategoryDetails(category, expanded)
-            Box(
-                modifier = Modifier
-                    .align(
-                        if (expanded)
-                            Alignment.Bottom
-                        else
-                            Alignment.CenterVertically
-                    )
-                    .noRippleClickable { expanded = !expanded }
-            ) {
-                ExpandableContentIcon(expanded)
-            }
+            FoodItemDetails(item, expanded)
+            if (itemShouldExpand)
+                Box(
+                    modifier = Modifier
+                        .align(
+                            if (expanded)
+                                Alignment.Bottom
+                            else
+                                Alignment.CenterVertically
+                        )
+                        .noRippleClickable { expanded = !expanded }
+                ) {
+                    ExpandableContentIcon(expanded)
+                }
         }
     }
 }
@@ -126,8 +134,8 @@ private fun ExpandableContentIcon(expanded: Boolean) {
 }
 
 @Composable
-private fun FoodCategoryDetails(
-    category: FoodCategory,
+private fun FoodItemDetails(
+    item: FoodItem,
     expanded: Boolean
 ) {
     Column(
@@ -141,32 +149,37 @@ private fun FoodCategoryDetails(
             .fillMaxWidth(0.80f)
     ) {
         Text(
-            text = category.name,
+            text = item.name,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.h6
         )
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Text(
-                text = category.description.trim(),
-                textAlign = TextAlign.Start,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.subtitle2,
-                maxLines = if (expanded) 10 else 2
-            )
-        }
+        if (item.description.isNotEmpty())
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = item.description.trim(),
+                    textAlign = TextAlign.Start,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.subtitle2,
+                    maxLines = if (expanded) 10 else 2
+                )
+            }
     }
 }
 
 @Composable
-fun FoodCategoryThumbnail(thumbnailUrl: String) {
+fun FoodItemThumbnail(
+    thumbnailUrl: String,
+    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?
+) {
     Image(
         painter = rememberCoilPainter(
-            request = thumbnailUrl
+            request = thumbnailUrl,
+            requestBuilder = iconTransformationBuilder
         ),
         modifier = Modifier
             .size(88.dp)
             .padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
-        contentDescription = "Food category thumbnail picture",
+        contentDescription = "Food item thumbnail picture",
     )
 }
 
