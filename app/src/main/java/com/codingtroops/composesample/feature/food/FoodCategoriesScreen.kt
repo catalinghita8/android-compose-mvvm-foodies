@@ -1,6 +1,5 @@
 package com.codingtroops.composesample.feature.food
 
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,12 +14,11 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.codingtroops.composesample.base.LAUNCH_LISTEN_TO_EFFECTS
+import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
 import com.codingtroops.composesample.model.response.FoodCategory
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
@@ -37,23 +35,31 @@ fun FoodCategoriesScreen(
     onEventSent: (event: FoodCategoriesContract.Event) -> Unit,
     onNavigationRequested: (navigationEffect: FoodCategoriesContract.Effect.Navigation) -> Unit
 ) {
-    val context = LocalContext.current
-    LaunchedEffect(LAUNCH_LISTEN_TO_EFFECTS) {
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+
+    // Listen for side effects from the VM
+    LaunchedEffect(LAUNCH_LISTEN_FOR_EFFECTS) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is FoodCategoriesContract.Effect.ToastDataWasLoaded ->
-                    Toast.makeText(context, "Food categories are loaded.", Toast.LENGTH_LONG).show()
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = "Food categories are loaded.", duration = SnackbarDuration.Short
+                    )
                 is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails -> onNavigationRequested(
                     effect
                 )
             }
         }?.collect()
     }
-    Surface(color = MaterialTheme.colors.background) {
-        if (state.isLoading)
-            LoadingBar()
-        FoodCategoriesList(state.categories, onEventSent)
+
+    Scaffold(scaffoldState = scaffoldState) {
+        Surface(color = MaterialTheme.colors.background) {
+            if (state.isLoading)
+                LoadingBar()
+            FoodCategoriesList(state.categories, onEventSent)
+        }
     }
+
 }
 
 @Composable
