@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.codingtroops.composesample.feature.category.FoodCategoryDetailsScreen
+import com.codingtroops.composesample.feature.category.FoodCategoryDetailsViewModel
 import com.codingtroops.composesample.feature.category.FoodCategoryViewModelFactory
 import com.codingtroops.composesample.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
 import com.codingtroops.composesample.feature.food.FoodCategoriesContract
@@ -61,7 +62,10 @@ private fun FoodApp() {
         ) { backStackEntry ->
             val categoryId =
                 backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_ID)!!
-            FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory(categoryId)))
+            val viewModel: FoodCategoryDetailsViewModel =
+                viewModel(factory = FoodCategoryViewModelFactory(categoryId))
+            val state = viewModel.viewState.collectAsState().value
+            FoodCategoryDetailsScreen(state)
         }
     }
 }

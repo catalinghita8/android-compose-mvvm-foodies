@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import coil.request.ImageRequest
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
 import com.codingtroops.composesample.model.FoodItem
@@ -71,7 +72,7 @@ fun FoodCategoriesList(
     foodItems: List<FoodItem>,
     itemShouldExpand: Boolean = false,
     iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    onItemClicked: (id: String) -> Unit
+    onItemClicked: (id: String) -> Unit = { }
 ) {
     LazyColumn {
         items(foodItems) { item ->
@@ -151,8 +152,10 @@ private fun FoodItemDetails(
         Text(
             text = item.name,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6
-        )
+            style = MaterialTheme.typography.h6,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+            )
         if (item.description.isNotEmpty())
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
