@@ -22,7 +22,8 @@ class FoodCategoryDetailsViewModel(
             val category = categories.first { it.id == categoryId }
             setState { copy(category = category) }
 
-            // TODO val foodItems =
+            val foodItems = repository.getMealsByCategory(categoryId)
+            setState { copy(categoryFoodItems = foodItems) }
         }
     }
 
