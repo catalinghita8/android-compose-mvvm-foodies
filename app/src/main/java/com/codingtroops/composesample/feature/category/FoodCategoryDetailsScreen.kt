@@ -64,27 +64,13 @@ private fun CategoryDetails(
     category: FoodItem?,
     offset: Float,
 ) {
-    var profilePictureState by remember { mutableStateOf(FoodCategoryProfileState.Normal) }
-    val categoryTransition = updateTransition(targetState = profilePictureState, label = "")
-    val categoryImageColorState by categoryTransition.animateColor(
-        targetValueByState = { colorState -> colorState.color },
-        label = ""
-    )
-    val categorySizeState by categoryTransition.animateDp(
-        targetValueByState = { sizeState -> sizeState.size },
-        label = ""
-    )
-    val categoryImageBorderValueState by categoryTransition.animateDp(
-        targetValueByState = { borderState -> borderState.borderSize },
-        label = ""
-    )
     Row {
         Card(
             modifier = Modifier.padding(16.dp),
             shape = CircleShape,
             border = BorderStroke(
-                width = categoryImageBorderValueState,
-                color = categoryImageColorState
+                width = 2.dp,
+                color = Color.Black
             ),
             elevation = 4.dp
         ) {
@@ -99,13 +85,7 @@ private fun CategoryDetails(
                 contentDescription = "Food category thumbnail picture",
             )
         }
-        Button(onClick = {
-            profilePictureState =
-                if (profilePictureState == FoodCategoryProfileState.Normal)
-                    FoodCategoryProfileState.Expanded
-                else
-                    FoodCategoryProfileState.Normal
-        }, modifier = Modifier.padding(16.dp)) { }
+
     }
 }
 
