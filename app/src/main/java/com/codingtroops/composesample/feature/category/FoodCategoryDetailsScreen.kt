@@ -1,13 +1,18 @@
 package com.codingtroops.composesample.feature.category
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -21,21 +26,34 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.max
 import coil.transform.CircleCropTransformation
 import com.codingtroops.composesample.feature.food.FoodCategoriesList
+import com.codingtroops.composesample.feature.food.FoodItemRow
 import com.codingtroops.composesample.model.FoodItem
 import com.google.accompanist.coil.rememberCoilPainter
+import kotlin.math.min
+
 
 // TODO finish screen
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
+    val scrollState = rememberLazyListState()
+    val offset: Float = min(
+        1f,
+        1 - (scrollState.firstVisibleItemScrollOffset / 600f + scrollState.firstVisibleItemIndex)
+    )
+
     Surface(color = MaterialTheme.colors.background) {
         Column {
-            CategoryDetails(state.category)
-            FoodCategoriesList(
-                foodItems = state.categoryFoodItems,
-                iconTransformationBuilder = { transformations(CircleCropTransformation()) }
-            )
+            CategoryDetails(state.category, offset)
+            LazyColumn(state = scrollState) {
+                items(state.categoryFoodItems) { item ->
+                    FoodItemRow(item = item,
+                        iconTransformationBuilder = { transformations(CircleCropTransformation()) })
+                }
+            }
         }
     }
 
@@ -44,6 +62,7 @@ fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
 @Composable
 private fun CategoryDetails(
     category: FoodItem?,
+    offset: Float,
 ) {
     var profilePictureState by remember { mutableStateOf(FoodCategoryProfileState.Normal) }
     val categoryTransition = updateTransition(targetState = profilePictureState, label = "")
@@ -76,7 +95,7 @@ private fun CategoryDetails(
                         transformations(CircleCropTransformation())
                     },
                 ),
-                modifier = Modifier.size(categorySizeState),
+                modifier = Modifier.size(max(64.dp, 128.dp * offset)),
                 contentDescription = "Food category thumbnail picture",
             )
         }
@@ -95,6 +114,7 @@ private enum class FoodCategoryProfileState(val color: Color, val size: Dp, val 
     Expanded(Color.Green, 240.dp, 4.dp)
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable
 fun FoodCategoryDetailsDefaultPreview() {

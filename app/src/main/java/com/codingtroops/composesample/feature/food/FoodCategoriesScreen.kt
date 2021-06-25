@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import coil.request.ImageRequest
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
 import com.codingtroops.composesample.model.FoodItem
@@ -59,7 +58,7 @@ fun FoodCategoriesScreen(
         Surface(color = MaterialTheme.colors.background) {
             if (state.isLoading)
                 LoadingBar()
-            FoodCategoriesList(foodItems = state.categories, itemShouldExpand = true) { itemId ->
+            FoodCategoriesList(foodItems = state.categories) { itemId ->
                 onEventSent(FoodCategoriesContract.Event.CategorySelection(itemId))
             }
         }
@@ -70,13 +69,11 @@ fun FoodCategoriesScreen(
 @Composable
 fun FoodCategoriesList(
     foodItems: List<FoodItem>,
-    itemShouldExpand: Boolean = false,
-    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     onItemClicked: (id: String) -> Unit = { }
 ) {
     LazyColumn {
         items(foodItems) { item ->
-            FoodItemRow(item, itemShouldExpand, iconTransformationBuilder, onItemClicked)
+            FoodItemRow(item = item, itemShouldExpand = true, onItemClicked = onItemClicked)
         }
     }
 }
@@ -84,9 +81,9 @@ fun FoodCategoriesList(
 @Composable
 fun FoodItemRow(
     item: FoodItem,
-    itemShouldExpand: Boolean,
-    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
-    onItemClicked: (id: String) -> Unit
+    itemShouldExpand: Boolean = false,
+    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
+    onItemClicked: (id: String) -> Unit = { }
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -155,7 +152,7 @@ private fun FoodItemDetails(
             style = MaterialTheme.typography.h6,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
-            )
+        )
         if (item.description.isNotEmpty())
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
