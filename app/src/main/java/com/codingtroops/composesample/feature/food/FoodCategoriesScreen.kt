@@ -94,22 +94,26 @@ fun FoodItemRow(
             .clickable { onItemClicked(item.id) }
     ) {
         var expanded by remember { mutableStateOf(false) }
-        Row(
-            modifier = Modifier.animateContentSize(),
-        ) {
+        Row(modifier = Modifier.animateContentSize()) {
             Box(modifier = Modifier.align(alignment = Alignment.CenterVertically)) {
                 FoodItemThumbnail(item.thumbnailUrl, iconTransformationBuilder)
             }
-            FoodItemDetails(item, expanded)
+            FoodItemDetails(
+                item = item,
+                expandedLines = if (expanded) 10 else 2,
+                modifier = Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 24.dp,
+                        bottom = 24.dp
+                    )
+                    .fillMaxWidth(0.80f)
+            )
             if (itemShouldExpand)
                 Box(
                     modifier = Modifier
-                        .align(
-                            if (expanded)
-                                Alignment.Bottom
-                            else
-                                Alignment.CenterVertically
-                        )
+                        .align(if (expanded) Alignment.Bottom else Alignment.CenterVertically)
                         .noRippleClickable { expanded = !expanded }
                 ) {
                     ExpandableContentIcon(expanded)
@@ -132,35 +136,27 @@ private fun ExpandableContentIcon(expanded: Boolean) {
 }
 
 @Composable
-private fun FoodItemDetails(
-    item: FoodItem,
-    expanded: Boolean
+fun FoodItemDetails(
+    item: FoodItem?,
+    expandedLines: Int,
+    modifier: Modifier
 ) {
-    Column(
-        modifier = Modifier
-            .padding(
-                start = 16.dp,
-                end = 8.dp,
-                top = 24.dp,
-                bottom = 24.dp
-            )
-            .fillMaxWidth(0.80f)
-    ) {
+    Column(modifier = modifier) {
         Text(
-            text = item.name,
+            text = item?.name ?: "",
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.subtitle1,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        if (item.description.isNotEmpty())
+        if (item?.description?.isNotEmpty() == true)
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
                     text = item.description.trim(),
                     textAlign = TextAlign.Start,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.subtitle2,
-                    maxLines = if (expanded) 10 else 2
+                    style = MaterialTheme.typography.caption,
+                    maxLines = expandedLines
                 )
             }
     }
