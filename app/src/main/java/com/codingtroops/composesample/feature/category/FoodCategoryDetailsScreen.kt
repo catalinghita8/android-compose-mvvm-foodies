@@ -73,13 +73,13 @@ private fun CategoryDetails(
                         transformations(CircleCropTransformation())
                     },
                 ),
-                modifier = Modifier.size(max(64.dp, 128.dp * scrollOffset)),
+                modifier = Modifier.size(max(72.dp, 128.dp * scrollOffset)),
                 contentDescription = "Food category thumbnail picture",
             )
         }
         FoodItemDetails(
             item = category,
-            expandedLines = (kotlin.math.max(2f, scrollOffset * 5)).toInt(),
+            expandedLines = (kotlin.math.max(3f, scrollOffset * 5)).toInt(),
             modifier = Modifier
                 .padding(
                     end = 16.dp,
