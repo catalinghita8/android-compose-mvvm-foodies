@@ -9,18 +9,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import androidx.compose.ui.unit.max
 import coil.transform.CircleCropTransformation
+import com.codingtroops.composesample.feature.common.BaseAppBar
 import com.codingtroops.composesample.feature.food.FoodItemDetails
 import com.codingtroops.composesample.feature.food.FoodItemRow
 import com.codingtroops.composesample.model.FoodItem
@@ -28,27 +27,33 @@ import com.google.accompanist.coil.rememberCoilPainter
 import kotlin.math.min
 
 
-@RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
+fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State, backAction: () -> Unit) {
     val scrollState = rememberLazyListState()
     val scrollOffset: Float = min(
         1f,
         1 - (scrollState.firstVisibleItemScrollOffset / 600f + scrollState.firstVisibleItemIndex)
     )
-
-    Surface(color = MaterialTheme.colors.background) {
-        Column {
-            CategoryDetails(state.category, scrollOffset)
-            LazyColumn(state = scrollState) {
-                items(state.categoryFoodItems) { item ->
-                    FoodItemRow(item = item,
-                        iconTransformationBuilder = { transformations(CircleCropTransformation()) })
+    Scaffold(
+        topBar = {
+            BaseAppBar(
+                text = state.category?.name ?: "",
+                icon = Icons.Default.ArrowBack
+            ) { backAction() }
+        }) {
+        Surface(color = MaterialTheme.colors.background) {
+            Column {
+                CategoryDetails(state.category, scrollOffset)
+                LazyColumn(state = scrollState) {
+                    items(state.categoryFoodItems) { item ->
+                        FoodItemRow(
+                            item = item,
+                            iconTransformationBuilder = { transformations(CircleCropTransformation()) })
+                    }
                 }
             }
         }
     }
-
 }
 
 @Composable
@@ -79,7 +84,7 @@ private fun CategoryDetails(
         }
         FoodItemDetails(
             item = category,
-            expandedLines = (kotlin.math.max(3f, scrollOffset * 5)).toInt(),
+            expandedLines = (kotlin.math.max(3f, scrollOffset * 6)).toInt(),
             modifier = Modifier
                 .padding(
                     end = 16.dp,
@@ -88,14 +93,5 @@ private fun CategoryDetails(
                 )
                 .fillMaxWidth()
         )
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.N)
-@Preview(showBackground = true)
-@Composable
-fun FoodCategoryDetailsDefaultPreview() {
-    ComposeSampleTheme {
-        FoodCategoryDetailsScreen(viewModel(factory = FoodCategoryViewModelFactory("Lamb")))
     }
 }

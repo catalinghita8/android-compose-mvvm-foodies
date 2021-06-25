@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
+import com.codingtroops.composesample.feature.common.BaseAppBar
 import com.codingtroops.composesample.model.FoodItem
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
@@ -54,7 +57,15 @@ fun FoodCategoriesScreen(
         }?.collect()
     }
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            BaseAppBar(
+                text = "Food Categories",
+                icon = Icons.Default.Home
+            )
+        }
+    ) {
         Surface(color = MaterialTheme.colors.background) {
             if (state.isLoading)
                 LoadingBar()
@@ -109,6 +120,7 @@ fun FoodItemRow(
                         bottom = 24.dp
                     )
                     .fillMaxWidth(0.80f)
+                    .align(Alignment.CenterVertically)
             )
             if (itemShouldExpand)
                 Box(
@@ -149,7 +161,7 @@ fun FoodItemDetails(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        if (item?.description?.isNotEmpty() == true)
+        if (item?.description?.trim()?.isNotEmpty() == true)
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
                     text = item.description.trim(),

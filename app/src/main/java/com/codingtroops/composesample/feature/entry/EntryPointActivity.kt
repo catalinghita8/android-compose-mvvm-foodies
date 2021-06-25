@@ -65,7 +65,9 @@ private fun FoodApp() {
             val viewModel: FoodCategoryDetailsViewModel =
                 viewModel(factory = FoodCategoryViewModelFactory(categoryId))
             val state = viewModel.viewState.collectAsState().value
-            FoodCategoryDetailsScreen(state)
+            FoodCategoryDetailsScreen(state) {
+                navController.navigateUp()
+            }
         }
     }
 }
