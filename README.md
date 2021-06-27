@@ -24,7 +24,7 @@ The project tries to combine popular Android tools and to demonstrate best devel
     
 * Modern Architecture
     * Single activity architecture (with [Navigation component](https://developer.android.com/guide/navigation/navigation-getting-started)) that defines navigation graphs
-    * MVVM blend with MVI to expose reactive state, events and side-effects.
+    * MVVM blend with MVI
     * [Android Architecture components](https://developer.android.com/topic/libraries/architecture) ([ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel), [Navigation](https://developer.android.com/jetpack/androidx/releases/navigation))
     * [Android KTX](https://developer.android.com/kotlin/ktx) - Jetpack Kotlin extensions
 
