@@ -6,22 +6,25 @@ The project tries to combine popular Android tools and to demonstrate best devel
 
 ## Description
 
-<img src="misc/image/application_anim.gif" width="336" align="right" hspace="20">
+<img src="misc/demo_gif_1.gif" width="336" align="right" hspace="20">
 
-* UI is built with [Compose](https://developer.android.com/jetpack/compose) as declarative UI framework for Android
-* Tools
+* UI 
+   * [Compose](https://developer.android.com/jetpack/compose) is used as declarative UI framework for Android.
+   * [Material design](https://material.io/design)
+
+* Tech/Tools
     * [Kotlin](https://kotlinlang.org/) 100% coverage
     * [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) and [Flow](https://developer.android.com/kotlin/flow) for async operations
     * [Retrofit](https://square.github.io/retrofit/) for networking
     * [Jetpack](https://developer.android.com/jetpack)
         * [Compose](https://developer.android.com/jetpack/compose) 
         * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) for navigation between composables
-        * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that stores, exposes and manages UI state
+        * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that stores, exposes and manages UI state, events and side-effects
     * [Coil](https://github.com/coil-kt/coil) for image loading
     
 * Modern Architecture
-    * Single activity architecture (with [Navigation component](https://developer.android.com/guide/navigation/navigation-getting-started))
-    * MVVM blend with MVI to expose reactive state and effects
+    * Single activity architecture (with [Navigation component](https://developer.android.com/guide/navigation/navigation-getting-started)) that defines navigation graphs and injects ViewModel components
+    * MVVM blend with MVI to expose reactive state, events and side-effects.
     * [Android Architecture components](https://developer.android.com/topic/libraries/architecture) ([ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel), [Navigation](https://developer.android.com/jetpack/androidx/releases/navigation))
     * [Android KTX](https://developer.android.com/kotlin/ktx) - Jetpack Kotlin extensions
 
