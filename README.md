@@ -6,7 +6,7 @@ The project tries to combine popular Android tools and to demonstrate best devel
 
 ## Description
 
-<img src="misc/demo_gif_2.gif" width="336" align="right" hspace="20">
+<img src="misc/demo_gif_3.gif" width="417" height="700" align="right" hspace="20">
 
 * UI 
    * [Compose](https://developer.android.com/jetpack/compose) is used as declarative UI framework for Android.
