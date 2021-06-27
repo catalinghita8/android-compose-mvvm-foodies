@@ -60,7 +60,7 @@ fun FoodCategoriesScreen(
         scaffoldState = scaffoldState,
         topBar = {
             BaseAppBar(
-                text = "Food Categories",
+                text = "Foodies",
                 icon = Icons.Default.Home,
                 color = MaterialTheme.colors.background
             )
