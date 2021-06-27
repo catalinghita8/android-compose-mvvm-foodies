@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,8 +19,7 @@ import com.codingtroops.composesample.feature.food.FoodCategoriesContract
 import com.codingtroops.composesample.feature.food.FoodCategoriesScreen
 import com.codingtroops.composesample.feature.food.FoodCategoriesViewModel
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+
 
 // Single Activity per app
 class EntryPointActivity : ComponentActivity() {
@@ -65,9 +63,7 @@ private fun FoodApp() {
             val viewModel: FoodCategoryDetailsViewModel =
                 viewModel(factory = FoodCategoryViewModelFactory(categoryId))
             val state = viewModel.viewState.collectAsState().value
-            FoodCategoryDetailsScreen(state) {
-                navController.navigateUp()
-            }
+            FoodCategoryDetailsScreen(state)
         }
     }
 }

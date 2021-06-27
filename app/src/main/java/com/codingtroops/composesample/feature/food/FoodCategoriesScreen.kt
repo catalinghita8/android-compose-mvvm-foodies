@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -62,9 +61,10 @@ fun FoodCategoriesScreen(
         topBar = {
             BaseAppBar(
                 text = "Food Categories",
-                icon = Icons.Default.Home
+                icon = Icons.Default.Home,
+                color = MaterialTheme.colors.background
             )
-        }
+        },
     ) {
         Surface(color = MaterialTheme.colors.background) {
             if (state.isLoading)

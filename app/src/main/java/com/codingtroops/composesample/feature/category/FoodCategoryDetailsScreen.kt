@@ -1,7 +1,6 @@
 package com.codingtroops.composesample.feature.category
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
@@ -10,16 +9,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import coil.transform.CircleCropTransformation
-import com.codingtroops.composesample.feature.common.BaseAppBar
 import com.codingtroops.composesample.feature.food.FoodItemDetails
 import com.codingtroops.composesample.feature.food.FoodItemRow
 import com.codingtroops.composesample.model.FoodItem
@@ -28,28 +23,20 @@ import kotlin.math.min
 
 
 @Composable
-fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State, backAction: () -> Unit) {
+fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
     val scrollState = rememberLazyListState()
     val scrollOffset: Float = min(
         1f,
         1 - (scrollState.firstVisibleItemScrollOffset / 600f + scrollState.firstVisibleItemIndex)
     )
-    Scaffold(
-        topBar = {
-            BaseAppBar(
-                text = state.category?.name ?: "",
-                icon = Icons.Default.ArrowBack
-            ) { backAction() }
-        }) {
-        Surface(color = MaterialTheme.colors.background) {
-            Column {
-                CategoryDetails(state.category, scrollOffset)
-                LazyColumn(state = scrollState) {
-                    items(state.categoryFoodItems) { item ->
-                        FoodItemRow(
-                            item = item,
-                            iconTransformationBuilder = { transformations(CircleCropTransformation()) })
-                    }
+    Surface(color = MaterialTheme.colors.background) {
+        Column {
+            CategoryDetails(state.category, scrollOffset)
+            LazyColumn(state = scrollState) {
+                items(state.categoryFoodItems) { item ->
+                    FoodItemRow(
+                        item = item,
+                        iconTransformationBuilder = { transformations(CircleCropTransformation()) })
                 }
             }
         }
