@@ -9,7 +9,7 @@ The project tries to combine popular Android tools and to demonstrate best devel
 <img src="misc/demo_gif_3.gif" width="380" height="620" align="right" hspace="20">
 
 * UI 
-   * [Compose](https://developer.android.com/jetpack/compose) is used as declarative UI framework for Android.
+   * [Compose](https://developer.android.com/jetpack/compose) declarative UI framework
    * [Material design](https://material.io/design)
 
 * Tech/Tools
@@ -19,11 +19,11 @@ The project tries to combine popular Android tools and to demonstrate best devel
     * [Jetpack](https://developer.android.com/jetpack)
         * [Compose](https://developer.android.com/jetpack/compose) 
         * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) for navigation between composables
-        * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that stores, exposes and manages UI state, events and side-effects
+        * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that stores, exposes and manages UI state
     * [Coil](https://github.com/coil-kt/coil) for image loading
     
 * Modern Architecture
-    * Single activity architecture (with [Navigation component](https://developer.android.com/guide/navigation/navigation-getting-started)) that defines navigation graphs and injects ViewModel components
+    * Single activity architecture (with [Navigation component](https://developer.android.com/guide/navigation/navigation-getting-started)) that defines navigation graphs
     * MVVM blend with MVI to expose reactive state, events and side-effects.
     * [Android Architecture components](https://developer.android.com/topic/libraries/architecture) ([ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel), [Navigation](https://developer.android.com/jetpack/androidx/releases/navigation))
     * [Android KTX](https://developer.android.com/kotlin/ktx) - Jetpack Kotlin extensions
