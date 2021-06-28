@@ -31,20 +31,28 @@ fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
     )
     Surface(color = MaterialTheme.colors.background) {
         Column {
-            CategoryDetails(state.category, scrollOffset)
+            Surface(elevation = 4.dp) {
+                CategoryDetailsCollapsingToolbar(state.category, scrollOffset)
+            }
+            Spacer(modifier = Modifier.height(2.dp))
             LazyColumn(state = scrollState) {
                 items(state.categoryFoodItems) { item ->
                     FoodItemRow(
                         item = item,
-                        iconTransformationBuilder = { transformations(CircleCropTransformation()) })
+                        iconTransformationBuilder = {
+                            transformations(
+                                CircleCropTransformation()
+                            )
+                        })
                 }
             }
         }
     }
+
 }
 
 @Composable
-private fun CategoryDetails(
+private fun CategoryDetailsCollapsingToolbar(
     category: FoodItem?,
     scrollOffset: Float,
 ) {
