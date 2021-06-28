@@ -49,7 +49,6 @@ fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
             }
         }
     }
-
 }
 
 @Composable

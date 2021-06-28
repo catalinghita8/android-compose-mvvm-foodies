@@ -15,12 +15,14 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
+import com.codingtroops.composesample.R
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
 import com.codingtroops.composesample.feature.common.BaseAppBar
 import com.codingtroops.composesample.model.FoodItem
@@ -60,7 +62,7 @@ fun FoodCategoriesScreen(
         scaffoldState = scaffoldState,
         topBar = {
             BaseAppBar(
-                text = "Foodies",
+                text = stringResource(R.string.app_name),
                 icon = Icons.Default.Home,
                 color = MaterialTheme.colors.background
             )
@@ -100,6 +102,7 @@ fun FoodItemRow(
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.surface,
+        elevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
