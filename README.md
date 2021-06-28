@@ -30,18 +30,19 @@ The project tries to combine popular Android tools and to demonstrate best devel
 
 
 ## Architecture
-The project is layered traditionally with a View, Presentation and Model separation.
+The project is layered traditionally with a View, Presentation, Model separation and presents a blend between MVVM and MVI inspired from [Yusuf Ceylan's architecture](https://proandroiddev.com/mvi-architecture-with-kotlin-flows-and-channels-d36820b2028d) but adapted to Compose.
 
+Architecture layers:
 * View - Composable screens that consume state, apply effects and delegate events.
-* ViewModel - [AAC ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that manages and reduces the state of the corresponding screen. Additionally, it intercepts UI events and produces effects. The ViewModel lifecycle scope is tied to the corresponding screen composable.
+* ViewModel - [AAC ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that manages and reduces the state of the corresponding screen. Additionally, it intercepts UI events and produces side-effects. The ViewModel lifecycle scope is tied to the corresponding screen composable.
 * Model - Repository classes that retrieve data. In a clean architecture context, one should use use-cases that tap into repositories.
 
 ![](https://i.imgur.com/GNA1hMa.png)
 
-As the architecture blends MVVM with MVI, there are a three main components described:
-* State - data class that holds the state content of the corresponding screen e.g. list of `FoodItem`, loading status etc.
-* Event - plain object that is sent through callbacks from the UI to the presentation layer. Events should reflect UI events caused by the user.
-* Effect - plain object that signals one-time side-effect actions that should impact the UI e.g. triggering a navigation action, showing a Toast, SnackBar etc.
+As the architecture blends MVVM with MVI, there are a three core components described:
+* **State** - data class that holds the state content of the corresponding screen e.g. list of `FoodItem`, loading status etc. The state is exposed as a `MutableStateFlow` that perfectly matches the use-case of receiving continuos updates with initial values and that are broadcast to an unknown number of subscribers.
+* **Event** - plain object that is sent through callbacks from the UI to the presentation layer. Events should reflect UI events caused by the user. Event updates are exposed as a `MutableSharedFlow` type which is similar to `StateFlow` and that behave as in the absence of a subscriber, any posted event will be immediately dropped.
+* **Effect** - plain object that signals one-time side-effect actions that should impact the UI e.g. triggering a navigation action, showing a Toast, SnackBar etc. Effects are exposed as `ChannelFlow` which behave as in each event is delivered to a single subscriber. An attempt to post an event without subscribers will suspend as soon as the channel buffer becomes full, waiting for a subscriber to appear.
 
 Every screen/flow defines a contract class that states all the core components described above: state content, events and effects.
 
