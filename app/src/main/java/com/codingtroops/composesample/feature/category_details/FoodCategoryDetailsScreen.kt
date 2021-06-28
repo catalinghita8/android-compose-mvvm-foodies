@@ -1,6 +1,7 @@
 package com.codingtroops.composesample.feature.category_details
 
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,7 @@ private fun CategoryDetailsCollapsingToolbar(
     category: FoodItem?,
     scrollOffset: Float,
 ) {
+    val imageSize by animateDpAsState(targetValue = max(72.dp, 128.dp * scrollOffset))
     Row {
         Card(
             modifier = Modifier.padding(16.dp),
@@ -73,7 +75,7 @@ private fun CategoryDetailsCollapsingToolbar(
                         transformations(CircleCropTransformation())
                     },
                 ),
-                modifier = Modifier.size(max(72.dp, 128.dp * scrollOffset)),
+                modifier = Modifier.size(max(72.dp, imageSize)),
                 contentDescription = "Food category thumbnail picture",
             )
         }
