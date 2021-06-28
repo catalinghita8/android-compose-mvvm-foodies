@@ -11,13 +11,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import com.codingtroops.composesample.feature.category.FoodCategoryDetailsScreen
-import com.codingtroops.composesample.feature.category.FoodCategoryDetailsViewModel
-import com.codingtroops.composesample.feature.category.FoodCategoryViewModelFactory
+import com.codingtroops.composesample.feature.category_details.FoodCategoryDetailsScreen
+import com.codingtroops.composesample.feature.category_details.FoodCategoryDetailsViewModel
+import com.codingtroops.composesample.feature.category_details.FoodCategoryViewModelFactory
 import com.codingtroops.composesample.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
-import com.codingtroops.composesample.feature.food.FoodCategoriesContract
-import com.codingtroops.composesample.feature.food.FoodCategoriesScreen
-import com.codingtroops.composesample.feature.food.FoodCategoriesViewModel
+import com.codingtroops.composesample.feature.categories.FoodCategoriesContract
+import com.codingtroops.composesample.feature.categories.FoodCategoriesScreen
+import com.codingtroops.composesample.feature.categories.FoodCategoriesViewModel
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 
 

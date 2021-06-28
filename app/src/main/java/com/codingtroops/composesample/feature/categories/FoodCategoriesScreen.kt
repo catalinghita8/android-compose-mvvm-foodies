@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.feature.food
+package com.codingtroops.composesample.feature.categories
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image

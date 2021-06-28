@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.feature.category
+package com.codingtroops.composesample.feature.category_details
 
 
 import androidx.compose.foundation.*
@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import coil.transform.CircleCropTransformation
-import com.codingtroops.composesample.feature.food.FoodItemDetails
-import com.codingtroops.composesample.feature.food.FoodItemRow
+import com.codingtroops.composesample.feature.categories.FoodItemDetails
+import com.codingtroops.composesample.feature.categories.FoodItemRow
 import com.codingtroops.composesample.model.FoodItem
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlin.math.min
