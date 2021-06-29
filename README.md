@@ -40,11 +40,13 @@ Architecture layers:
 ![](https://i.imgur.com/GNA1hMa.png)
 
 As the architecture blends MVVM with MVI, there are a three core components described:
-* **State** - data class that holds the state content of the corresponding screen e.g. list of `FoodItem`, loading status etc. The state is exposed as a `MutableStateFlow` that perfectly matches the use-case of receiving continuos updates with initial values and that are broadcast to an unknown number of subscribers.
-* **Event** - plain object that is sent through callbacks from the UI to the presentation layer. Events should reflect UI events caused by the user. Event updates are exposed as a `MutableSharedFlow` type which is similar to `StateFlow` and that behave as in the absence of a subscriber, any posted event will be immediately dropped.
+* **State** - data class that holds the state content of the corresponding screen e.g. list of `FoodItem`, loading status etc. The state is exposed as a `MutableStateFlow` that perfectly matches the use-case of receiving continuos updates with initial values and that are broadcasted to an unknown number of subscribers.
+
+* **Event** - plain object that is sent through callbacks from the UI to the presentation layer. Events should reflect UI events caused by the user. Event updates are exposed as a `MutableSharedFlow` type which is similar to `StateFlow` and that behaves as in the absence of a subscriber, any posted event will be immediately dropped.
+
 * **Effect** - plain object that signals one-time side-effect actions that should impact the UI e.g. triggering a navigation action, showing a Toast, SnackBar etc. Effects are exposed as `ChannelFlow` which behave as in each event is delivered to a single subscriber. An attempt to post an event without subscribers will suspend as soon as the channel buffer becomes full, waiting for a subscriber to appear.
 
-Every screen/flow defines a contract class that states all the core components described above: state content, events and effects.
+Every screen/flow defines its own contract class that states all corresponding core components described above: state content, events and effects.
 
 ### Decoupling Compose
 Since Compose is a standalone declarative UI framework, one must try to decouple it from the Android framework as much as possible. In order to achieve this, the project uses an `EntryPointActivity` that defines a navigation graph where every screen is a composable.
