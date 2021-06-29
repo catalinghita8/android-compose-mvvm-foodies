@@ -8,23 +8,15 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FoodMenuApi {
-
-    private var service: Service
-
-    init {
-        val retrofit: Retrofit = Retrofit
-            .Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(API_URL)
-            .build()
-        service = retrofit.create(Service::class.java)
-    }
+@Singleton
+class FoodMenuApi @Inject constructor(private val service: Service) {
 
     suspend fun getFoodCategories(): FoodCategoriesResponse = service.getFoodCategories()
-    suspend fun getMealsByCategory(categoryId: String): MealsResponse = service.getMealsByCategory(categoryId)
-
+    suspend fun getMealsByCategory(categoryId: String): MealsResponse =
+        service.getMealsByCategory(categoryId)
 
     interface Service {
         @GET("categories.php")
