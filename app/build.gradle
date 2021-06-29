@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -57,6 +59,18 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
+
+    // Hilt
+    implementation "com.google.dagger:dagger:2.37"
+    kapt "com.google.dagger:dagger-compiler:2.37"
+    api 'com.google.dagger:dagger-android:2.37'
+    api 'com.google.dagger:dagger-android-support:2.37'
+    kapt 'com.google.dagger:dagger-android-processor:2.37'
+    implementation "com.google.dagger:hilt-android:2.37"
+    kapt "com.google.dagger:hilt-android-compiler:2.37"
+
+    kapt "com.google.dagger:hilt-compiler:2.35"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
