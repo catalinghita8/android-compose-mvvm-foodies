@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.feature.categories
+package com.codingtroops.composesample.ui.feature.categories
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import com.codingtroops.composesample.R
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
-import com.codingtroops.composesample.feature.common.BaseAppBar
+import com.codingtroops.composesample.ui.feature.common.BaseAppBar
 import com.codingtroops.composesample.model.FoodItem
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme

@@ -3,8 +3,11 @@ package com.codingtroops.composesample.model.data
 import com.codingtroops.composesample.model.FoodItem
 import com.codingtroops.composesample.model.response.FoodCategoriesResponse
 import com.codingtroops.composesample.model.response.MealsResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FoodMenuRepository(private val foodMenuApi: FoodMenuApi = FoodMenuApi()) {
+@Singleton
+class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodMenuApi) {
 
     private var cachedCategories: List<FoodItem>? = null
 
@@ -42,11 +45,6 @@ class FoodMenuRepository(private val foodMenuApi: FoodMenuApi = FoodMenuApi()) {
                 thumbnailUrl = category.thumbnailUrl
             )
         }
-    }
-
-
-    companion object {
-        val instance = FoodMenuRepository()
     }
 
 }

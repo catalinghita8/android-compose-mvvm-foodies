@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.feature.categories
+package com.codingtroops.composesample.ui.feature.categories
 
 import com.codingtroops.composesample.base.ViewSideEffect
 import com.codingtroops.composesample.base.ViewEvent
