@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComposeSample">
         <activity
-            android:name="com.codingtroops.composesample.feature.entry.EntryPointActivity"
+            android:name="com.codingtroops.composesample.ui.feature.entry.EntryPointActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ComposeSample.NoActionBar">

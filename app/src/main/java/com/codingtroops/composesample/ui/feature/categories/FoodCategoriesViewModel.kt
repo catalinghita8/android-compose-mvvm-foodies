@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.feature.categories
+package com.codingtroops.composesample.ui.feature.categories
 
 import androidx.lifecycle.viewModelScope
 import com.codingtroops.composesample.base.BaseViewModel
