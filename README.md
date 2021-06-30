@@ -2,7 +2,7 @@
 
 Foodies is a sample project that presents a modern 2021 approach to Android app development. 
 
-The project tries to combine popular Android tools and to demonstrate best developement practices by utilizing up to date tech-stack like Compose and Kotlin Flow while also presenting modern Android application Architecture that is scalable and maintainable through a MVVM blend with MVI.
+The project tries to combine popular Android tools and to demonstrate best developement practices by utilizing up to date tech-stack like Compose, Kotlin Flow and Hilt while also presenting modern Android application Architecture that is scalable and maintainable through a MVVM blend with MVI.
 
 ## Description
 
@@ -15,11 +15,12 @@ The project tries to combine popular Android tools and to demonstrate best devel
 * Tech/Tools
     * [Kotlin](https://kotlinlang.org/) 100% coverage
     * [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) and [Flow](https://developer.android.com/kotlin/flow) for async operations
-    * [Retrofit](https://square.github.io/retrofit/) for networking
+    * [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) for dependency injection
     * [Jetpack](https://developer.android.com/jetpack)
         * [Compose](https://developer.android.com/jetpack/compose) 
         * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) for navigation between composables
         * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that stores, exposes and manages UI state
+    * [Retrofit](https://square.github.io/retrofit/) for networking
     * [Coil](https://github.com/coil-kt/coil) for image loading
     
 * Modern Architecture
