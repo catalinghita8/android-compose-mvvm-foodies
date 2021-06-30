@@ -11,6 +11,10 @@ import com.codingtroops.composesample.di.ViewModelAssistedFactory
 import com.codingtroops.composesample.model.data.FoodMenuRepository
 import kotlinx.coroutines.launch
 
+/**
+ * Since it requires dynamic runtime param injection, assisted injection is used.
+ * @param categoryId - requires runtime dynamic injection
+ */
 class FoodCategoryDetailsViewModel @AssistedInject constructor(
     @Assisted private val categoryId: String,
     private val repository: FoodMenuRepository
