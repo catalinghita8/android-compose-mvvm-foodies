@@ -1,4 +1,4 @@
-package com.codingtroops.composesample.ui.feature.common
+package com.codingtroops.composesample.ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
