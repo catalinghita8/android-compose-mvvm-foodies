@@ -15,10 +15,10 @@ import androidx.navigation.compose.rememberNavController
 import com.codingtroops.composesample.di.ViewModelAssistedFactory
 import com.codingtroops.composesample.ui.feature.category_details.FoodCategoryDetailsScreen
 import com.codingtroops.composesample.ui.feature.category_details.FoodCategoryDetailsViewModel
-import com.codingtroops.composesample.ui.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
 import com.codingtroops.composesample.ui.feature.categories.FoodCategoriesContract
 import com.codingtroops.composesample.ui.feature.categories.FoodCategoriesScreen
 import com.codingtroops.composesample.ui.feature.categories.FoodCategoriesViewModel
+import com.codingtroops.composesample.ui.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
