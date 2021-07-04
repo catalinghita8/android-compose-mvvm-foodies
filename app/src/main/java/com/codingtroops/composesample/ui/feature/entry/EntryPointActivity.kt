@@ -70,8 +70,8 @@ private fun FoodApp(viewModelAssistedFactory: ViewModelAssistedFactory) {
             val viewModel: FoodCategoryDetailsViewModel =
                 viewModel(
                     factory = FoodCategoryDetailsViewModel.Factory(
-                        viewModelAssistedFactory,
-                        categoryId
+                        assistedFactory = viewModelAssistedFactory,
+                        categoryId = categoryId
                     )
                 )
             val state = viewModel.viewState.collectAsState().value
