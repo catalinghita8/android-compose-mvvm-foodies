@@ -47,7 +47,7 @@ fun FoodCategoriesScreen(
     LaunchedEffect(LAUNCH_LISTEN_FOR_EFFECTS) {
         effectFlow?.onEach { effect ->
             when (effect) {
-                is FoodCategoriesContract.Effect.ToastDataWasLoaded ->
+                is FoodCategoriesContract.Effect.DataWasLoaded ->
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = "Food categories are loaded.",
                         duration = SnackbarDuration.Short

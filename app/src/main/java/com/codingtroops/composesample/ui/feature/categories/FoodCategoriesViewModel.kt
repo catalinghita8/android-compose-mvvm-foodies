@@ -32,7 +32,7 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
         setState {
             copy(categories = categories).setIsLoading(false)
         }
-        setEffect { FoodCategoriesContract.Effect.ToastDataWasLoaded }
+        setEffect { FoodCategoriesContract.Effect.DataWasLoaded }
     }
 
 }

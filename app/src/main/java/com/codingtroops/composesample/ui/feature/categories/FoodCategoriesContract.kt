@@ -10,12 +10,10 @@ class FoodCategoriesContract {
         data class CategorySelection(val categoryName: String) : Event()
     }
 
-    data class State(
-        val categories: List<FoodItem> = listOf()
-    ) : ViewState()
+    data class State(val categories: List<FoodItem> = listOf()) : ViewState()
 
     sealed class Effect : ViewSideEffect {
-        object ToastDataWasLoaded : Effect()
+        object DataWasLoaded : Effect()
 
         sealed class Navigation : Effect() {
             data class ToCategoryDetails(val categoryName: String) : Navigation()
