@@ -59,4 +59,4 @@ The dynamic injection of the `categoryId` was done through defining it as an `@A
 ### Decoupling Compose
 Since Compose is a standalone declarative UI framework, one must try to decouple it from the Android framework as much as possible. In order to achieve this, the project uses an `EntryPointActivity` that defines a navigation graph where every screen is a composable.
 
-The `EntryPointActivity` also collects `state` flows and passes them together with the `Effect` flows to each Screen composable. This way, the Activity is coupled with the navigation component and only screen (root level) composables. This causes the screen composables to only receive and interact with plain objects and Kotlin flows, therefore being platform agnostic.  
+The `EntryPointActivity` also collects `state` objects and passes them together with the `Effect` flows to each Screen composable. This way, the Activity is coupled with the navigation component and only screen (root level) composables. This causes the screen composables to only receive and interact with plain objects and Kotlin flows, therefore being platform agnostic.  
