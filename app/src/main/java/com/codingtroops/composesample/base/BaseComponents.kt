@@ -26,11 +26,7 @@ abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : Vi
     ViewModel() {
 
     private val initialState: UiState by lazy { setInitialState() }
-
     abstract fun setInitialState(): UiState
-
-    private val currentState: UiState
-        get() = viewState.value
 
     private val _viewState: MutableState<UiState> = mutableStateOf(initialState)
     val viewState: State<UiState> = _viewState
@@ -49,7 +45,7 @@ abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : Vi
     }
 
     protected fun setState(reducer: UiState.() -> UiState) {
-        val newState = currentState.reducer()
+        val newState = viewState.value.reducer()
         _viewState.value = newState
     }
 
