@@ -48,7 +48,7 @@ private fun FoodApp(viewModelAssistedFactory: ViewModelAssistedFactory) {
     NavHost(navController, startDestination = NavigationKeys.Route.FOOD_CATEGORIES_LIST) {
         composable(route = NavigationKeys.Route.FOOD_CATEGORIES_LIST) {
             val viewModel: FoodCategoriesViewModel = hiltViewModel()
-            val state = viewModel.viewState.collectAsState().value
+            val state = viewModel.viewState.value
             FoodCategoriesScreen(
                 state = state,
                 effectFlow = viewModel.effect,
@@ -74,7 +74,7 @@ private fun FoodApp(viewModelAssistedFactory: ViewModelAssistedFactory) {
                         categoryId = categoryId
                     )
                 )
-            val state = viewModel.viewState.collectAsState().value
+            val state = viewModel.viewState.value
             FoodCategoryDetailsScreen(state)
         }
     }

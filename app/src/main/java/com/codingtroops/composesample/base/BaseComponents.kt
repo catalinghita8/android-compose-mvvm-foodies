@@ -1,5 +1,8 @@
 package com.codingtroops.composesample.base
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
@@ -19,18 +22,18 @@ interface ViewEvent
 
 interface ViewSideEffect
 
-abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : ViewSideEffect> :
+abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : ViewSideEffect> :
     ViewModel() {
 
-    private val initialState: State by lazy { setInitialState() }
+    private val initialState: UiState by lazy { setInitialState() }
 
-    abstract fun setInitialState(): State
+    abstract fun setInitialState(): UiState
 
-    private val currentState: State
+    private val currentState: UiState
         get() = viewState.value
 
-    private val _viewState: MutableStateFlow<State> = MutableStateFlow(initialState)
-    val viewState = _viewState.asStateFlow()
+    private val _viewState: MutableState<UiState> = mutableStateOf(initialState)
+    val viewState: State<UiState> = _viewState
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
 
@@ -45,7 +48,7 @@ abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : View
         viewModelScope.launch { _event.emit(event) }
     }
 
-    protected fun setState(reducer: State.() -> State) {
+    protected fun setState(reducer: UiState.() -> UiState) {
         val newState = currentState.reducer()
         _viewState.value = newState
     }
