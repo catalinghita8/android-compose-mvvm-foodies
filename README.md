@@ -38,10 +38,10 @@ Architecture layers:
 * ViewModel - [AAC ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that manages and reduces the state of the corresponding screen. Additionally, it intercepts UI events and produces side-effects. The ViewModel lifecycle scope is tied to the corresponding screen composable.
 * Model - Repository classes that retrieve data. In a clean architecture context, one should use use-cases that tap into repositories.
 
-![](https://i.imgur.com/GNA1hMa.png)
+![](https://i.imgur.com/aGmKuUd.png)
 
 As the architecture blends MVVM with MVI, there are a three core components described:
-* **State** - data class that holds the state content of the corresponding screen e.g. list of `FoodItem`, loading status etc. The state is exposed as a `MutableStateFlow` that perfectly matches the use-case of receiving continuos updates with initial values and that are broadcasted to an unknown number of subscribers.
+* **State** - data class that holds the state content of the corresponding screen e.g. list of `FoodItem`, loading status etc. The state is exposed as a Compose runtime `MutableState` object from that perfectly matches the use-case of receiving continuous updates with initial value.
 
 * **Event** - plain object that is sent through callbacks from the UI to the presentation layer. Events should reflect UI events caused by the user. Event updates are exposed as a `MutableSharedFlow` type which is similar to `StateFlow` and that behaves as in the absence of a subscriber, any posted event will be immediately dropped.
 
