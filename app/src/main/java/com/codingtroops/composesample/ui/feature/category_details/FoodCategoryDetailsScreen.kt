@@ -36,7 +36,10 @@ fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
                 CategoryDetailsCollapsingToolbar(state.category, scrollOffset)
             }
             Spacer(modifier = Modifier.height(2.dp))
-            LazyColumn(state = scrollState) {
+            LazyColumn(
+                state = scrollState,
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
                 items(state.categoryFoodItems) { item ->
                     FoodItemRow(
                         item = item,
@@ -44,7 +47,8 @@ fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
                             transformations(
                                 CircleCropTransformation()
                             )
-                        })
+                        }
+                    )
                 }
             }
         }
