@@ -10,7 +10,7 @@ private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,
     secondary = Teal200,
-    background = Grey200
+    background = Black200
 )
 
 private val LightColorPalette = lightColors(
@@ -32,7 +32,7 @@ onSurface = Color.Black,
 @Composable
 fun ComposeSampleTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
         DarkColorPalette
