@@ -86,7 +86,9 @@ fun FoodCategoriesList(
     foodItems: List<FoodItem>,
     onItemClicked: (id: String) -> Unit = { }
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = PaddingValues(bottom = 16.dp)
+    ) {
         items(foodItems) { item ->
             FoodItemRow(item = item, itemShouldExpand = true, onItemClicked = onItemClicked)
         }
