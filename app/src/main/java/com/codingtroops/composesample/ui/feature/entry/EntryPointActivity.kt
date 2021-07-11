@@ -57,9 +57,7 @@ private fun FoodApp() {
             arguments = listOf(navArgument(NavigationKeys.Arg.FOOD_CATEGORY_ID) {
                 type = NavType.StringType
             })
-        ) { backStackEntry ->
-            val categoryId =
-                backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_ID)!!
+        ) {
             val viewModel: FoodCategoryDetailsViewModel = hiltViewModel()
             val state = viewModel.viewState.value
             FoodCategoryDetailsScreen(state)
