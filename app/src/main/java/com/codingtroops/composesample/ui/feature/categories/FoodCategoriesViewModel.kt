@@ -16,7 +16,7 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
     }
 
     override fun setInitialState() =
-        FoodCategoriesContract.State(categories = listOf()).apply { setIsLoading(true) }
+        FoodCategoriesContract.State(categories = listOf(), isLoading = true)
 
     override fun handleEvents(event: FoodCategoriesContract.Event) {
         when (event) {
@@ -27,10 +27,9 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
     }
 
     private suspend fun getFoodCategories() {
-        setState { setIsLoading(true) }
         val categories = repository.getFoodCategories()
         setState {
-            copy(categories = categories).setIsLoading(false)
+            copy(categories = categories, isLoading = false)
         }
         setEffect { FoodCategoriesContract.Effect.DataWasLoaded }
     }
