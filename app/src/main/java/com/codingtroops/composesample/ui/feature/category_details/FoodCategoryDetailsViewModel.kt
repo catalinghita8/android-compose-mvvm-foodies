@@ -35,7 +35,6 @@ class FoodCategoryDetailsViewModel @AssistedInject constructor(
     }
 
     override fun setInitialState() = FoodCategoryDetailsContract.State(null, listOf())
-        .apply { setIsLoading(true) }
 
     override fun handleEvents(event: FoodCategoryDetailsContract.Event) {}
 

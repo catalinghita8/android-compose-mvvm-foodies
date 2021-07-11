@@ -12,7 +12,7 @@ class FoodCategoryDetailsContract {
     data class State(
         val category: FoodItem?,
         val categoryFoodItems: List<FoodItem>
-        ) : ViewState()
+        ) : ViewState
 
     sealed class Effect : ViewSideEffect
 
