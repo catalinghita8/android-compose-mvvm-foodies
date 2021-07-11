@@ -1,22 +1,19 @@
 package com.codingtroops.composesample.ui.feature.category_details
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import com.codingtroops.composesample.base.BaseViewModel
-import com.codingtroops.composesample.di.ViewModelAssistedFactory
 import com.codingtroops.composesample.model.data.FoodMenuRepository
+import com.codingtroops.composesample.ui.feature.entry.NavigationKeys
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-/**
- * Since it requires dynamic runtime param injection, assisted injection is used.
- * @param categoryId - requires runtime dynamic injection
- */
-class FoodCategoryDetailsViewModel @AssistedInject constructor(
-    @Assisted private val categoryId: String,
+
+@HiltViewModel
+class FoodCategoryDetailsViewModel @Inject constructor(
+    private val stateHandle: SavedStateHandle,
     private val repository: FoodMenuRepository
 ) : BaseViewModel<
         FoodCategoryDetailsContract.Event,
@@ -25,6 +22,8 @@ class FoodCategoryDetailsViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
+            val categoryId = stateHandle.get<String>(NavigationKeys.Arg.FOOD_CATEGORY_ID)
+                ?: throw IllegalStateException("No categoryId was passed to destination.")
             val categories = repository.getFoodCategories()
             val category = categories.first { it.id == categoryId }
             setState { copy(category = category) }
@@ -38,13 +37,4 @@ class FoodCategoryDetailsViewModel @AssistedInject constructor(
 
     override fun handleEvents(event: FoodCategoryDetailsContract.Event) {}
 
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val assistedFactory: ViewModelAssistedFactory,
-        private val categoryId: String
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return assistedFactory.create(categoryId) as T
-        }
-    }
 }

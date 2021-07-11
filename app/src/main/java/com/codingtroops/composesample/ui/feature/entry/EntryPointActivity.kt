@@ -4,15 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import com.codingtroops.composesample.di.ViewModelAssistedFactory
 import com.codingtroops.composesample.ui.feature.category_details.FoodCategoryDetailsScreen
 import com.codingtroops.composesample.ui.feature.category_details.FoodCategoryDetailsViewModel
 import com.codingtroops.composesample.ui.feature.categories.FoodCategoriesContract
@@ -21,21 +18,17 @@ import com.codingtroops.composesample.ui.feature.categories.FoodCategoriesViewMo
 import com.codingtroops.composesample.ui.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 // Single Activity per app
 @AndroidEntryPoint
 class EntryPointActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var viewModelAssistedFactory: ViewModelAssistedFactory
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeSampleTheme {
-                FoodApp(viewModelAssistedFactory)
+                FoodApp()
             }
         }
     }
@@ -43,7 +36,7 @@ class EntryPointActivity : ComponentActivity() {
 }
 
 @Composable
-private fun FoodApp(viewModelAssistedFactory: ViewModelAssistedFactory) {
+private fun FoodApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = NavigationKeys.Route.FOOD_CATEGORIES_LIST) {
         composable(route = NavigationKeys.Route.FOOD_CATEGORIES_LIST) {
@@ -64,16 +57,8 @@ private fun FoodApp(viewModelAssistedFactory: ViewModelAssistedFactory) {
             arguments = listOf(navArgument(NavigationKeys.Arg.FOOD_CATEGORY_ID) {
                 type = NavType.StringType
             })
-        ) { backStackEntry ->
-            val categoryId =
-                backStackEntry.arguments!!.getString(NavigationKeys.Arg.FOOD_CATEGORY_ID)!!
-            val viewModel: FoodCategoryDetailsViewModel =
-                viewModel(
-                    factory = FoodCategoryDetailsViewModel.Factory(
-                        assistedFactory = viewModelAssistedFactory,
-                        categoryId = categoryId
-                    )
-                )
+        ) {
+            val viewModel: FoodCategoryDetailsViewModel = hiltViewModel()
             val state = viewModel.viewState.value
             FoodCategoryDetailsScreen(state)
         }
