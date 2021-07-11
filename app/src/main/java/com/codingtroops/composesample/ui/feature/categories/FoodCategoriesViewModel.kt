@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.codingtroops.composesample.base.BaseViewModel
 import com.codingtroops.composesample.model.data.FoodMenuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,8 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
         setState {
             copy(categories = categories, isLoading = false)
         }
+        delay(3500)
+        setState { copy(isLoading = true) }
         setEffect { FoodCategoriesContract.Effect.DataWasLoaded }
     }
 

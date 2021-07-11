@@ -69,13 +69,12 @@ fun FoodCategoriesScreen(
             )
         },
     ) {
-        Surface(color = MaterialTheme.colors.background) {
-            if (state.isLoading)
-                LoadingBar()
-
+        Box {
             FoodCategoriesList(foodItems = state.categories) { itemId ->
                 onEventSent(FoodCategoriesContract.Event.CategorySelection(itemId))
             }
+            if (state.isLoading)
+                LoadingBar()
         }
     }
 
