@@ -52,9 +52,9 @@ Every screen/flow defines its own contract class that states all corresponding c
 ### Dependency injection
 [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) is used for Dependency Injection as a wrapper on top of [Dagger](https://github.com/google/dagger). 
 
-Apart from regular parameter/constructor injection, assisted injection is used in order to inject runtime `categoryId` parameter to `FoodCategoryDetailsViewModel`. While regular viewmodel injection was done through the `HiltViewModel` annotation, `FoodCategoryDetailsViewModel` was injected through the `@AssistedInject` annotation.
+Most of the dependencies are injected with `@Singleton` scope and are provided within the `FoodMenuApiProvider` module.
 
-The dynamic injection of the `categoryId` was done through defining it as an `@Assisted` parameter while also providing `ViewModelProvider.Factory` class for `FoodCategoryDetailsViewModel`. Additionally, an assisted factory `ViewModelAssistedFactory` was defined through the `@AssistedFactory` annotation.
+For ViewModels, we use the out-of-the-box `@HiltViewModel` annotation that injects them with the scope of the navigation graph composables that represent the screens.
 
 ### Decoupling Compose
 Since Compose is a standalone declarative UI framework, one must try to decouple it from the Android framework as much as possible. In order to achieve this, the project uses an `EntryPointActivity` that defines a navigation graph where every screen is a composable.
