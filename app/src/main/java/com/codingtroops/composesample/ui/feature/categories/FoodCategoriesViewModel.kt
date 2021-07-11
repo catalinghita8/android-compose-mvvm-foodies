@@ -32,8 +32,6 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
         setState {
             copy(categories = categories, isLoading = false)
         }
-        delay(3500)
-        setState { copy(isLoading = true) }
         setEffect { FoodCategoriesContract.Effect.DataWasLoaded }
     }
 
