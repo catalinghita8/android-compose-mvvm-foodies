@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.codingtroops.composesample.base.BaseViewModel
 import com.codingtroops.composesample.model.data.FoodMenuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
