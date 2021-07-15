@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.codingtroops.composesample.ui.feature.categories.FoodItemDetails
 import com.codingtroops.composesample.ui.feature.categories.FoodItemRow
 import com.codingtroops.composesample.model.FoodItem
-import com.google.accompanist.coil.rememberCoilPainter
 import kotlin.math.min
 
 
@@ -72,9 +72,9 @@ private fun CategoryDetailsCollapsingToolbar(
             elevation = 4.dp
         ) {
             Image(
-                painter = rememberCoilPainter(
-                    request = category?.thumbnailUrl,
-                    requestBuilder = {
+                painter = rememberImagePainter(
+                    data = category?.thumbnailUrl,
+                    builder = {
                         transformations(CircleCropTransformation())
                     },
                 ),

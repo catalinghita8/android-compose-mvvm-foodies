@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.codingtroops.composesample.R
 import com.codingtroops.composesample.base.LAUNCH_LISTEN_FOR_EFFECTS
@@ -28,7 +29,6 @@ import com.codingtroops.composesample.ui.common.BaseAppBar
 import com.codingtroops.composesample.model.FoodItem
 import com.codingtroops.composesample.noRippleClickable
 import com.codingtroops.composesample.ui.theme.ComposeSampleTheme
-import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -98,7 +98,7 @@ fun FoodCategoriesList(
 fun FoodItemRow(
     item: FoodItem,
     itemShouldExpand: Boolean = false,
-    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
+    iconTransformationBuilder: ImageRequest.Builder.() -> Unit = { },
     onItemClicked: (id: String) -> Unit = { }
 ) {
     Card(
@@ -183,12 +183,12 @@ fun FoodItemDetails(
 @Composable
 fun FoodItemThumbnail(
     thumbnailUrl: String,
-    iconTransformationBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?
+    iconTransformationBuilder: ImageRequest.Builder.() -> Unit
 ) {
     Image(
-        painter = rememberCoilPainter(
-            request = thumbnailUrl,
-            requestBuilder = iconTransformationBuilder
+        painter = rememberImagePainter(
+            data = thumbnailUrl,
+            builder = iconTransformationBuilder
         ),
         modifier = Modifier
             .size(88.dp)
