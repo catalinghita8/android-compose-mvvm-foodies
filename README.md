@@ -1,8 +1,10 @@
 # Foodies - Modern Android Architecture
 
-Foodies is a sample project that presents a modern 2021 approach to Android app development. 
+Foodies is a sample project that presents a modern approach to Android app development.
 
-The project tries to combine popular Android tools and to demonstrate best development practices by utilizing up to date tech-stack like Compose, Kotlin Flow and Hilt while also presenting modern Android application Architecture that is scalable and maintainable through a MVVM blend with MVI.
+The project tries to combine popular Android tools and to demonstrate best development practices by utilizing up to date tech-stack like Compose, Kotlin Flow and Hilt.
+
+The sample is presenting a modern Android application Architecture that is scalable and maintainable through a MVVM blend with MVI. Additionally, the application features animations like expanding and collapsing row items or other effects like collapsing toolbar.
 
 ## Description
 
