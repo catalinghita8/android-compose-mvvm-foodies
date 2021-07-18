@@ -4,7 +4,7 @@ Foodies is a sample project that presents a modern approach to Android app devel
 
 The project tries to combine popular Android tools and to demonstrate best development practices by utilizing up to date tech-stack like Compose, Kotlin Flow and Hilt.
 
-The sample is presenting a modern Android application Architecture that is scalable and maintainable through a MVVM blend with MVI. Additionally, the application features animations like expanding and collapsing row items or other effects like collapsing toolbar.
+The sample app is presenting a modern Android application Architecture that is scalable and maintainable through a MVVM blend with MVI. Additionally, the application features animations like expanding and collapsing row items or other effects like collapsing toolbar.
 
 ## Description
 
