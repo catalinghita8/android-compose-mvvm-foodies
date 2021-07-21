@@ -24,7 +24,6 @@ import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.codingtroops.foodies.R
 import com.codingtroops.foodies.base.LAUNCH_LISTEN_FOR_EFFECTS
-import com.codingtroops.foodies.ui.common.BaseAppBar
 import com.codingtroops.foodies.model.FoodItem
 import com.codingtroops.foodies.noRippleClickable
 import com.codingtroops.foodies.ui.theme.ComposeSampleTheme
@@ -61,11 +60,7 @@ fun FoodCategoriesScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            BaseAppBar(
-                text = stringResource(R.string.app_name),
-                icon = Icons.Default.Home,
-                color = MaterialTheme.colors.background
-            )
+            CategoriesAppBar()
         },
     ) {
         Box {
@@ -77,6 +72,23 @@ fun FoodCategoriesScreen(
         }
     }
 
+}
+
+@Composable
+private fun CategoriesAppBar() {
+    TopAppBar(
+        navigationIcon = {
+            Icon(
+                imageVector = Icons.Default.Home,
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .clickable(onClick = { }),
+                contentDescription = "Action icon"
+            )
+        },
+        title = { Text(stringResource(R.string.app_name)) },
+        backgroundColor = MaterialTheme.colors.background
+    )
 }
 
 @Composable
