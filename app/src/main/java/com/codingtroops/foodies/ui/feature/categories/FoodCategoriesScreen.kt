@@ -80,9 +80,7 @@ private fun CategoriesAppBar() {
         navigationIcon = {
             Icon(
                 imageVector = Icons.Default.Home,
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .clickable(onClick = { }),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 contentDescription = "Action icon"
             )
         },
