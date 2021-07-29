@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        compose_version = '1.0.0-rc02'
+        compose_version = '1.0.0'
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-alpha03'
+        classpath 'com.android.tools.build:gradle:7.1.0-alpha05'
         // Kotlin kapt 1.5.20 has a bug in regards to Hilt latest version.
         // See https://github.com/google/dagger/issues/2684
         // Using stable 1.5.10 version instead.
