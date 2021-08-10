@@ -69,6 +69,8 @@ fun FoodCategoriesScreen(
             }
             if (state.isLoading)
                 LoadingBar()
+            if(state.error != null)
+                Text(state.error)
         }
     }
 

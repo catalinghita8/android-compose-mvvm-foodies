@@ -10,7 +10,7 @@ class FoodCategoriesContract {
         data class CategorySelection(val categoryName: String) : Event()
     }
 
-    data class State(val categories: List<FoodItem> = listOf(), val isLoading: Boolean = false) : ViewState
+    data class State(val categories: List<FoodItem> = listOf(), val isLoading: Boolean = false, val error: String? = null) : ViewState
 
     sealed class Effect : ViewSideEffect {
         object DataWasLoaded : Effect()

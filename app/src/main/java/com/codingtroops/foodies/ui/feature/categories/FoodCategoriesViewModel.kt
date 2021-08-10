@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.codingtroops.foodies.base.BaseViewModel
 import com.codingtroops.foodies.model.data.FoodMenuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -12,7 +13,11 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
     BaseViewModel<FoodCategoriesContract.Event, FoodCategoriesContract.State, FoodCategoriesContract.Effect>() {
 
     init {
-        viewModelScope.launch { getFoodCategories() }
+        val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+            throwable.printStackTrace()
+            setState { copy(error = throwable.localizedMessage, isLoading = false) }
+        }
+        viewModelScope.launch(coroutineExceptionHandler) { getFoodCategories() }
     }
 
     override fun setInitialState() =

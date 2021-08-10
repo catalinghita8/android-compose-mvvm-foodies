@@ -23,7 +23,7 @@ class FoodMenuApi @Inject constructor(private val service: Service) {
     }
 
     companion object {
-        const val API_URL = "https://www.themealdb.com/api/json/v1/1/"
+        const val API_URL = "https://www.themealdb.com/api/json/v1/1/po/"
     }
 }
 
