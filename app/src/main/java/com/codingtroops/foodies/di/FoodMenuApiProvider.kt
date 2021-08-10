@@ -2,6 +2,8 @@ package com.codingtroops.foodies.di
 
 import com.codingtroops.foodies.model.data.FoodMenuApi
 import com.codingtroops.foodies.model.data.FoodMenuApi.Companion.API_URL
+import com.codingtroops.foodies.model.data.FoodMenuRepository
+import com.codingtroops.foodies.model.data.FoodMenuRepositoryContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +23,12 @@ class FoodMenuApiProvider {
         return OkHttpClient
             .Builder()
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFoodMenuRepository(foodMenuApi: FoodMenuApi): FoodMenuRepositoryContract {
+        return FoodMenuRepository(foodMenuApi)
     }
 
     @Provides

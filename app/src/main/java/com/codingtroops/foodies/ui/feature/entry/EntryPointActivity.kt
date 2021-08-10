@@ -57,11 +57,11 @@ private fun FoodApp() {
 @Composable
 private fun FoodCategoriesDestination(navController: NavHostController) {
     val viewModel: FoodCategoriesViewModel = hiltViewModel()
-    val state = viewModel.viewState.value
+    val state = viewModel.state.value
     FoodCategoriesScreen(
         state = state,
-        effectFlow = viewModel.effect,
-        onEventSent = { event -> viewModel.setEvent(event) },
+        effectFlow = null,
+        onEventSent = { event -> },
         onNavigationRequested = { navigationEffect ->
             if (navigationEffect is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails) {
                 navController.navigate("${NavigationKeys.Route.FOOD_CATEGORIES_LIST}/${navigationEffect.categoryName}")

@@ -7,11 +7,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodMenuApi) {
+open class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodMenuApi): FoodMenuRepositoryContract {
 
     private var cachedCategories: List<FoodItem>? = null
 
-    suspend fun getFoodCategories(): List<FoodItem> {
+    open override suspend fun getFoodCategories(): List<FoodItem> {
         var cachedCategories = cachedCategories
         if (cachedCategories == null) {
             cachedCategories = foodMenuApi.getFoodCategories().mapCategoriesToItems()
@@ -47,4 +47,8 @@ class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodMenuAp
         }
     }
 
+}
+
+interface FoodMenuRepositoryContract {
+    suspend fun getFoodCategories(): List<FoodItem>
 }
