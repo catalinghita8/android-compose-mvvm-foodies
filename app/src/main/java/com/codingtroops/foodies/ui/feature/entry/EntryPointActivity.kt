@@ -61,7 +61,7 @@ private fun FoodCategoriesDestination(navController: NavHostController) {
     FoodCategoriesScreen(
         state = state,
         effectFlow = null,
-        onEventSent = { event -> },
+        onEventSent = { event ->  },
         onNavigationRequested = { navigationEffect ->
             if (navigationEffect is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails) {
                 navController.navigate("${NavigationKeys.Route.FOOD_CATEGORIES_LIST}/${navigationEffect.categoryName}")

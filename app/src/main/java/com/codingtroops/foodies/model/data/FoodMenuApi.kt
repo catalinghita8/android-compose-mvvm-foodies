@@ -10,13 +10,13 @@ import javax.inject.Singleton
 @Singleton
 class FoodMenuApi @Inject constructor(private val service: Service) {
 
-    fun getFoodCategories(): FoodCategoriesResponse = service.getFoodCategories()
+    suspend fun getFoodCategories(): FoodCategoriesResponse = service.getFoodCategories()
     suspend fun getMealsByCategory(categoryId: String): MealsResponse =
         service.getMealsByCategory(categoryId)
 
     interface Service {
         @GET("categories.php")
-        fun getFoodCategories(): FoodCategoriesResponse
+        suspend fun getFoodCategories(): FoodCategoriesResponse
 
         @GET("filter.php")
         suspend fun getMealsByCategory(@Query("c") categoryId: String): MealsResponse

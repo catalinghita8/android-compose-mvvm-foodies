@@ -30,7 +30,7 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
         }
     }
 
-    private suspend fun getFoodCategories() {
+    private suspend fun getFoodCategories() { // 18544
         val categories = repository.getFoodCategories()
         state.value = state.value.copy(categories = categories, isLoading = false, error = null)
     }

@@ -16,17 +16,8 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.whenever
-import org.mockito.runners.MockitoJUnitRunner
-import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FoodCategoriesViewModelTest {
@@ -39,7 +30,6 @@ class FoodCategoriesViewModelTest {
     @Before
     @Throws(Exception::class)
     fun setup() {
-        // init mocks
         MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(testDispatcher)
     }
@@ -47,9 +37,7 @@ class FoodCategoriesViewModelTest {
 
     @After
     fun tearDown() {
-        // 2
         Dispatchers.resetMain()
-        // 3
         testDispatcher.cleanupTestCoroutines()
     }
 

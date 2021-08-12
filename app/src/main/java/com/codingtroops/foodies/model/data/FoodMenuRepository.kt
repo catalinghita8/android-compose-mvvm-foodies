@@ -11,7 +11,7 @@ open class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodM
 
     private var cachedCategories: List<FoodItem>? = null
 
-    open override suspend fun getFoodCategories(): List<FoodItem> {
+    override suspend fun getFoodCategories(): List<FoodItem> {
         var cachedCategories = cachedCategories
         if (cachedCategories == null) {
             cachedCategories = foodMenuApi.getFoodCategories().mapCategoriesToItems()
@@ -24,7 +24,6 @@ open class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodM
         val categoryName = getFoodCategories().first { it.id == categoryId }.name
         return foodMenuApi.getMealsByCategory(categoryName).mapMealsToItems()
     }
-
 
     private fun FoodCategoriesResponse.mapCategoriesToItems(): List<FoodItem> {
         return this.categories.map { category ->
