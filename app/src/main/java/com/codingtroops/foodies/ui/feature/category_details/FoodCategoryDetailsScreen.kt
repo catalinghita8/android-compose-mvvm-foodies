@@ -11,10 +11,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.codingtroops.foodies.ui.feature.categories.FoodItemDetails
@@ -24,16 +28,29 @@ import kotlin.math.min
 
 
 @Composable
-fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
+fun FoodCategoryDetailsScreen(
+    state: FoodCategoryDetailsContract.State,
+    viewModel: FoodCategoryDetailsViewModel
+) {
     val scrollState = rememberLazyListState()
     val scrollOffset: Float = min(
         1f,
         1 - (scrollState.firstVisibleItemScrollOffset / 600f + scrollState.firstVisibleItemIndex)
     )
+
+    val timerIsShown = remember { mutableStateOf(true) }
+    val timerState = viewModel.timeLiveData.observeAsState()
     Surface(color = MaterialTheme.colors.background) {
         Column {
             Surface(elevation = 4.dp) {
                 CategoryDetailsCollapsingToolbar(state.category, scrollOffset)
+            }
+            Spacer(modifier = Modifier.height(2.dp))
+            Row {
+                Button(onClick = { timerIsShown.value = !timerIsShown.value }) {
+                    Text("Enable/disable timer")
+                }
+                TimerValue(viewModel = viewModel, timerIsShown.value, timerState.value.toString())
             }
             Spacer(modifier = Modifier.height(2.dp))
             LazyColumn(
@@ -53,6 +70,26 @@ fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
             }
         }
     }
+}
+
+@Composable
+private fun TimerValue(viewModel: FoodCategoryDetailsViewModel, shouldBeShown: Boolean, timerValue: String) {
+    if (shouldBeShown)
+        TimerText(viewModel, timerValue)
+}
+
+@Composable
+private fun TimerText(viewModel: FoodCategoryDetailsViewModel, timerValue: String) {
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(key1 = viewModel) {
+        viewModel.startTimer()
+        lifecycle.addObserver(viewModel.timer)
+        onDispose {
+            viewModel.stopTimer()
+            lifecycle.removeObserver(viewModel.timer)
+        }
+    }
+    Text("Timer count is now: " + timerValue)
 }
 
 @Composable
