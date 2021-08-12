@@ -11,10 +11,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.codingtroops.foodies.ui.feature.categories.FoodItemDetails
@@ -24,17 +28,31 @@ import kotlin.math.min
 
 
 @Composable
-fun FoodCategoryDetailsScreen(state: FoodCategoryDetailsContract.State) {
+fun FoodCategoryDetailsScreen(
+    state: FoodCategoryDetailsContract.State,
+    viewModel: FoodCategoryDetailsViewModel
+) {
     val scrollState = rememberLazyListState()
     val scrollOffset: Float = min(
         1f,
         1 - (scrollState.firstVisibleItemScrollOffset / 600f + scrollState.firstVisibleItemIndex)
     )
+
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(key1 = viewModel) {
+        lifecycle.addObserver(viewModel.timer)
+        onDispose {
+            lifecycle.removeObserver(viewModel.timer)
+        }
+    }
+    val timerState = viewModel.timeLiveData.observeAsState()
     Surface(color = MaterialTheme.colors.background) {
         Column {
             Surface(elevation = 4.dp) {
                 CategoryDetailsCollapsingToolbar(state.category, scrollOffset)
             }
+            Spacer(modifier = Modifier.height(2.dp))
+            Text("Timer count is now: " + timerState.value.toString())
             Spacer(modifier = Modifier.height(2.dp))
             LazyColumn(
                 state = scrollState,

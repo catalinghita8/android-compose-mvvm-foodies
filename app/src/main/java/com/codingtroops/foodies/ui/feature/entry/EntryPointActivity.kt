@@ -73,7 +73,7 @@ private fun FoodCategoriesDestination(navController: NavHostController) {
 private fun FoodCategoryDetailsDestination() {
     val viewModel: FoodCategoryDetailsViewModel = hiltViewModel()
     val state = viewModel.viewState.value
-    FoodCategoryDetailsScreen(state)
+    FoodCategoryDetailsScreen(state, viewModel)
 }
 
 object NavigationKeys {
