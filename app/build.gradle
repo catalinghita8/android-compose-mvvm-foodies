@@ -7,13 +7,13 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
-    compileSdk 30
+    compileSdk 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.codingtroops.foodies"
         minSdk 24
-        targetSdk 30
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -86,7 +86,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
 
     // Navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha06"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha07"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
 
     // Image loading
