@@ -9,8 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.codingtroops.foodies.ui.feature.category_details.FoodCategoryDetailsScreen
 import com.codingtroops.foodies.ui.feature.category_details.FoodCategoryDetailsViewModel
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesContract
