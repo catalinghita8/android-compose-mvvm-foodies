@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.mockito.internal.stubbing.answers.AnswersWithDelay
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FoodCategoriesViewModelTest {
@@ -53,22 +54,31 @@ class FoodCategoriesViewModelTest {
                     "description"
                 )
             )
-//            mockRepo.stub {
-//                onBlocking { getFoodCategories() }.doReturn(dummyList)
-//            }
             val mockedRepo = mockk<FoodMenuRepositoryContract>()
             coEvery {
                 mockedRepo.getFoodCategories()
-            } returns dummyList
+            } coAnswers {
+                delay(300)
+                dummyList
+            }
+
             val viewModel = FoodCategoriesViewModel(mockedRepo)
+            // Test initial state
+            assertThat(viewModel.state.value).isEqualTo(
+                FoodCategoriesContract.State(
+                    categories = emptyList(),
+                    isLoading = true
+                )
+            )
+            testDispatcher.advanceUntilIdle()
 
-//            whenever(dummyRepo.getFoodCategories()).thenReturn(dummyList)
-
+            // Test success state
             assertThat(viewModel.state.value).isEqualTo(
                 FoodCategoriesContract.State(
                     categories = dummyList,
                     isLoading = false
                 )
             )
+
         }
 }
