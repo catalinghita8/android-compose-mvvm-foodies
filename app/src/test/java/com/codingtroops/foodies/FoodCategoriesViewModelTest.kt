@@ -1,5 +1,6 @@
 package com.codingtroops.foodies
 
+import androidx.lifecycle.SavedStateHandle
 import com.codingtroops.foodies.model.FoodItem
 import com.codingtroops.foodies.model.data.FoodMenuRepository
 import com.codingtroops.foodies.model.data.FoodMenuRepositoryContract
@@ -62,12 +63,14 @@ class FoodCategoriesViewModelTest {
                 dummyList
             }
 
-            val viewModel = FoodCategoriesViewModel(mockedRepo)
+            val savedStateHandle = SavedStateHandle().apply { this["error"] = "some_error" }
+            val viewModel = FoodCategoriesViewModel(mockedRepo, savedStateHandle)
             // Test initial state
             assertThat(viewModel.state.value).isEqualTo(
                 FoodCategoriesContract.State(
                     categories = emptyList(),
-                    isLoading = true
+                    isLoading = true,
+                    error = "some_error"
                 )
             )
             testDispatcher.advanceUntilIdle()
@@ -79,6 +82,8 @@ class FoodCategoriesViewModelTest {
                     isLoading = false
                 )
             )
+            val newStoredValue: String? = savedStateHandle["error"]
+            assertThat(newStoredValue).isEqualTo("restore_error")
 
         }
 }

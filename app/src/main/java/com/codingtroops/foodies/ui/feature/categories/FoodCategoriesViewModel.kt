@@ -2,6 +2,7 @@ package com.codingtroops.foodies.ui.feature.categories
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingtroops.foodies.base.BaseViewModel
@@ -13,12 +14,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMenuRepositoryContract) :
+class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMenuRepositoryContract,
+                                                  private val stateHandle: SavedStateHandle
+) :
     ViewModel() {
 
     val state = mutableStateOf(
-        FoodCategoriesContract.State(categories = listOf(), isLoading = true, error = null)
+        FoodCategoriesContract.State(categories = listOf(), isLoading = true, error = restoreError())
     )
+
+    fun restoreError(): String? {
+        return stateHandle["error"]
+    }
 
     init {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -33,6 +40,7 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
     private suspend fun getFoodCategories() { // 18544
         val categories = repository.getFoodCategories()
         state.value = state.value.copy(categories = categories, isLoading = false, error = null)
+        stateHandle["error"] = "restore_error"
     }
 
 }
