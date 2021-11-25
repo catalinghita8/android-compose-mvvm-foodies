@@ -23,8 +23,8 @@ import org.mockito.internal.stubbing.answers.AnswersWithDelay
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FoodCategoriesViewModelTest {
-    @Mock
-    lateinit var mockRepo: FoodMenuRepositoryContract
+
+    private val mockedRepo = mockk<FoodMenuRepositoryContract>()
 
     @ExperimentalCoroutinesApi
     private val testDispatcher = TestCoroutineDispatcher()
@@ -32,10 +32,8 @@ class FoodCategoriesViewModelTest {
     @Before
     @Throws(Exception::class)
     fun setup() {
-        MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(testDispatcher)
     }
-
 
     @After
     fun tearDown() {
@@ -43,10 +41,9 @@ class FoodCategoriesViewModelTest {
         testDispatcher.cleanupTestCoroutines()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testListIsPassedToState() =
-        runBlockingTest {
+        runBlocking {
             val dummyList = listOf(
                 FoodItem(
                     "id",
@@ -55,7 +52,6 @@ class FoodCategoriesViewModelTest {
                     "description"
                 )
             )
-            val mockedRepo = mockk<FoodMenuRepositoryContract>()
             coEvery {
                 mockedRepo.getFoodCategories()
             } coAnswers {
@@ -63,14 +59,13 @@ class FoodCategoriesViewModelTest {
                 dummyList
             }
 
-            val savedStateHandle = SavedStateHandle().apply { this["error"] = "some_error" }
-            val viewModel = FoodCategoriesViewModel(mockedRepo, savedStateHandle)
+            val viewModel = FoodCategoriesViewModel(mockedRepo, SavedStateHandle())
             // Test initial state
             assertThat(viewModel.state.value).isEqualTo(
                 FoodCategoriesContract.State(
                     categories = emptyList(),
                     isLoading = true,
-                    error = "some_error"
+                    error = null
                 )
             )
             testDispatcher.advanceUntilIdle()
@@ -82,8 +77,5 @@ class FoodCategoriesViewModelTest {
                     isLoading = false
                 )
             )
-            val newStoredValue: String? = savedStateHandle["error"]
-            assertThat(newStoredValue).isEqualTo("restore_error")
-
         }
 }
