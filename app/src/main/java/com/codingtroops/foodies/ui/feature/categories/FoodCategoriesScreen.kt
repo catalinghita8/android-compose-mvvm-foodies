@@ -215,7 +215,9 @@ fun FoodItemThumbnail(
 fun LoadingBar() {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize().semantics { testTag = "loading_tag" }
+        modifier = Modifier
+            .fillMaxSize()
+            .semantics { testTag = "loading_tag" }
     ) {
         CircularProgressIndicator()
     }

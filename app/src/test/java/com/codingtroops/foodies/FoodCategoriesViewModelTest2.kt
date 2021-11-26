@@ -6,15 +6,12 @@ import com.codingtroops.foodies.model.data.FoodMenuRepositoryContract
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesContract
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesViewModel
 import com.google.common.truth.Truth
-import io.mockk.coEvery
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -39,8 +36,11 @@ class FoodCategoriesViewModelTest2 {
     }
 
     @Test
-    fun testListIsPassedToState() = runBlocking {
-        val viewModel = FoodCategoriesViewModel(FakeRepo(), SavedStateHandle())
+    fun testSuccessState() = runBlocking {
+        val viewModel = FoodCategoriesViewModel(
+            FakeRestaurantsRepository { TestConstants.restaurants },
+            SavedStateHandle()
+        )
         // Test initial state
         Truth.assertThat(viewModel.state.value).isEqualTo(
             FoodCategoriesContract.State(
@@ -54,27 +54,47 @@ class FoodCategoriesViewModelTest2 {
         // Test success state
         Truth.assertThat(viewModel.state.value).isEqualTo(
             FoodCategoriesContract.State(
-                categories = FakeRepo.restaurants,
+                categories = TestConstants.restaurants,
                 isLoading = false
+            )
+        )
+    }
+
+    @Test
+    fun testError() = runBlocking {
+        val viewModel = FoodCategoriesViewModel(
+            FakeRestaurantsRepository { throw Throwable(TestConstants.repoError) },
+            SavedStateHandle()
+        )
+        testDispatcher.advanceUntilIdle()
+
+        // Test error state
+        Truth.assertThat(viewModel.state.value).isEqualTo(
+            FoodCategoriesContract.State(
+                categories = emptyList(),
+                isLoading = false,
+                error = TestConstants.repoError
             )
         )
     }
 }
 
-class FakeRepo : FoodMenuRepositoryContract {
+class FakeRestaurantsRepository(private val content: () -> List<FoodItem>) : FoodMenuRepositoryContract {
     override suspend fun getFoodCategories(): List<FoodItem> {
         delay(300)
-        return restaurants
+        return content()
     }
+}
 
-    companion object {
-        val restaurants = listOf(
-            FoodItem(
-                "id",
-                "name",
-                "thumbURL",
-                "description"
-            )
+object TestConstants {
+    val restaurants = listOf(
+        FoodItem(
+            "id",
+            "name",
+            "thumbURL",
+            "description"
         )
-    }
+    )
+
+    const val repoError = "Retrieval failed"
 }
