@@ -10,33 +10,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.MockitoAnnotations
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FoodCategoriesViewModelTest2 {
 
-    @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
-
     @Before
     @Throws(Exception::class)
     fun setup() {
-        Dispatchers.setMain(testDispatcher)
+        MockitoAnnotations.initMocks(this)
+        Dispatchers.setMain(StandardTestDispatcher())
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
-    fun testSuccessState() = runBlocking {
+    fun testSuccessState() = runTest {
         val viewModel = FoodCategoriesViewModel(
             FakeRestaurantsRepository { TestConstants.restaurants },
             SavedStateHandle()
@@ -49,7 +45,7 @@ class FoodCategoriesViewModelTest2 {
                 error = null
             )
         )
-        testDispatcher.advanceUntilIdle()
+        advanceUntilIdle()
 
         // Test success state
         Truth.assertThat(viewModel.state.value).isEqualTo(
@@ -61,12 +57,12 @@ class FoodCategoriesViewModelTest2 {
     }
 
     @Test
-    fun testError() = runBlocking {
+    fun testError() = runTest {
         val viewModel = FoodCategoriesViewModel(
             FakeRestaurantsRepository { throw Throwable(TestConstants.repoError) },
             SavedStateHandle()
         )
-        testDispatcher.advanceUntilIdle()
+        advanceUntilIdle()
 
         // Test error state
         Truth.assertThat(viewModel.state.value).isEqualTo(
