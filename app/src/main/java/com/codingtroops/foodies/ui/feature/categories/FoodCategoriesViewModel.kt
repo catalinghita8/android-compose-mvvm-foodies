@@ -6,16 +6,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingtroops.foodies.base.BaseViewModel
+import com.codingtroops.foodies.di.MainDispatcher
 import com.codingtroops.foodies.model.data.FoodMenuRepository
 import com.codingtroops.foodies.model.data.FoodMenuRepositoryContract
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMenuRepositoryContract,
-                                                  private val stateHandle: SavedStateHandle
+                                                  private val stateHandle: SavedStateHandle,
+                                                  @MainDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     ViewModel() {
 
@@ -32,7 +35,7 @@ class FoodCategoriesViewModel @Inject constructor(private val repository: FoodMe
             throwable.printStackTrace()
             state.value = state.value.copy(error = throwable.localizedMessage, isLoading = false)
         }
-        viewModelScope.launch(coroutineExceptionHandler) {
+        viewModelScope.launch(dispatcher + coroutineExceptionHandler) {
             getFoodCategories()
         }
     }

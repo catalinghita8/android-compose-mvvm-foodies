@@ -20,7 +20,7 @@ import org.junit.Test
 
 class FoodMenuRepositoryTest {
 
-    private val dispatcher = StandardTestDispatcher()
+    private val dispatcher = UnconfinedTestDispatcher()
     private val scope = TestScope(dispatcher)
 
     @Test
