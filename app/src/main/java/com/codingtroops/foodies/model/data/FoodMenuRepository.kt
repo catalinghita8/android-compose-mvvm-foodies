@@ -1,28 +1,37 @@
 package com.codingtroops.foodies.model.data
 
+import com.codingtroops.foodies.di.IoDispatcher
 import com.codingtroops.foodies.model.FoodItem
 import com.codingtroops.foodies.model.response.FoodCategoriesResponse
 import com.codingtroops.foodies.model.response.MealsResponse
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-open class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodMenuApi): FoodMenuRepositoryContract {
+open class FoodMenuRepository @Inject constructor(private val foodMenuApi: IFoodMenuApi,
+                                                  @IoDispatcher private val dispatcher: CoroutineDispatcher): FoodMenuRepositoryContract {
 
     private var cachedCategories: List<FoodItem>? = null
 
     override suspend fun getFoodCategories(): List<FoodItem> {
-        var cachedCategories = cachedCategories
-        if (cachedCategories == null) {
-            cachedCategories = foodMenuApi.getFoodCategories().mapCategoriesToItems()
-            this.cachedCategories = cachedCategories
+        return withContext(dispatcher) {
+            var cachedCategories = cachedCategories
+            if (cachedCategories == null) {
+                cachedCategories = foodMenuApi.getFoodCategories().mapCategoriesToItems()
+                this@FoodMenuRepository.cachedCategories = cachedCategories
+            }
+            return@withContext cachedCategories
         }
-        return cachedCategories
     }
 
     suspend fun getMealsByCategory(categoryId: String): List<FoodItem> {
-        val categoryName = getFoodCategories().first { it.id == categoryId }.name
-        return foodMenuApi.getMealsByCategory(categoryName).mapMealsToItems()
+        return withContext(dispatcher) {
+            val categoryName = getFoodCategories().first { it.id == categoryId }.name
+            return@withContext foodMenuApi.getMealsByCategory(categoryName).mapMealsToItems()
+        }
     }
 
     private fun FoodCategoriesResponse.mapCategoriesToItems(): List<FoodItem> {

@@ -8,10 +8,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FoodMenuApi @Inject constructor(private val service: Service) {
-
-    suspend fun getFoodCategories(): FoodCategoriesResponse = service.getFoodCategories()
-    suspend fun getMealsByCategory(categoryId: String): MealsResponse =
+class FoodMenuApi @Inject constructor(private val service: Service): IFoodMenuApi {
+    override suspend fun getFoodCategories(): FoodCategoriesResponse = service.getFoodCategories()
+    override suspend fun getMealsByCategory(categoryId: String): MealsResponse =
         service.getMealsByCategory(categoryId)
 
     interface Service {
@@ -25,6 +24,11 @@ class FoodMenuApi @Inject constructor(private val service: Service) {
     companion object {
         const val API_URL = "https://www.themealdb.com/api/json/v1/1/"
     }
+}
+
+interface IFoodMenuApi {
+    suspend fun getFoodCategories(): FoodCategoriesResponse
+    suspend fun getMealsByCategory(categoryId: String): MealsResponse
 }
 
 

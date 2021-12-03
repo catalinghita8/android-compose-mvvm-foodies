@@ -4,10 +4,13 @@ import com.codingtroops.foodies.model.data.FoodMenuApi
 import com.codingtroops.foodies.model.data.FoodMenuApi.Companion.API_URL
 import com.codingtroops.foodies.model.data.FoodMenuRepository
 import com.codingtroops.foodies.model.data.FoodMenuRepositoryContract
+import com.codingtroops.foodies.model.data.IFoodMenuApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,8 +30,14 @@ class FoodMenuApiProvider {
 
     @Provides
     @Singleton
-    fun provideFoodMenuRepository(foodMenuApi: FoodMenuApi): FoodMenuRepositoryContract {
-        return FoodMenuRepository(foodMenuApi)
+    fun provideFoodMenuRepository(foodMenuApi: IFoodMenuApi, @IoDispatcher dispatcher: CoroutineDispatcher): FoodMenuRepositoryContract {
+        return FoodMenuRepository(foodMenuApi, dispatcher)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFoodMenuApi(service: FoodMenuApi.Service): IFoodMenuApi {
+        return FoodMenuApi(service)
     }
 
     @Provides
