@@ -1,15 +1,23 @@
 package com.codingtroops.foodies.model.data
 
+import com.codingtroops.foodies.di.IoDispatcher
 import com.codingtroops.foodies.model.response.FoodCategoriesResponse
 import com.codingtroops.foodies.model.response.MealsResponse
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FoodMenuApi @Inject constructor(private val service: Service): IFoodMenuApi {
-    override suspend fun getFoodCategories(): FoodCategoriesResponse = service.getFoodCategories()
+class FoodMenuApi @Inject constructor(private val service: Service,
+                                      @IoDispatcher private val dispatcher: CoroutineDispatcher): IFoodMenuApi {
+    override suspend fun getFoodCategories(): FoodCategoriesResponse {
+        return withContext(dispatcher) {
+            service.getFoodCategories()
+        }
+    }
     override suspend fun getMealsByCategory(categoryId: String): MealsResponse =
         service.getMealsByCategory(categoryId)
 

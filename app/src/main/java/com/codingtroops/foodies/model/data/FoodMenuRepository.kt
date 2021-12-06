@@ -1,5 +1,6 @@
 package com.codingtroops.foodies.model.data
 
+import android.util.Log
 import com.codingtroops.foodies.di.IoDispatcher
 import com.codingtroops.foodies.model.FoodItem
 import com.codingtroops.foodies.model.response.FoodCategoriesResponse
@@ -11,12 +12,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+class GetFoodItemsUSeCase(private val repository: FoodMenuRepository) {
+    suspend operator fun invoke(): List<FoodItem> {
+        return repository.getFoodCategories().sortedBy { it.name }
+    }
+}
+
+@Singleton
 open class FoodMenuRepository @Inject constructor(private val foodMenuApi: IFoodMenuApi,
-                                                  @IoDispatcher private val dispatcher: CoroutineDispatcher): FoodMenuRepositoryContract {
+                                                  @IoDispatcher private val dispatcher: CoroutineDispatcher) {
 
     private var cachedCategories: List<FoodItem>? = null
 
-    override suspend fun getFoodCategories(): List<FoodItem> {
+    suspend fun getFoodCategories(): List<FoodItem> {
         return withContext(dispatcher) {
             var cachedCategories = cachedCategories
             if (cachedCategories == null) {

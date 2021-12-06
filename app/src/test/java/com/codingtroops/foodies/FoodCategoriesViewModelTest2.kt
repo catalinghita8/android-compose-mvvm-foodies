@@ -2,33 +2,30 @@ package com.codingtroops.foodies
 
 import androidx.lifecycle.SavedStateHandle
 import com.codingtroops.foodies.model.FoodItem
-import com.codingtroops.foodies.model.data.FoodMenuRepositoryContract
+import com.codingtroops.foodies.model.data.*
+import com.codingtroops.foodies.model.response.FoodCategoriesResponse
+import com.codingtroops.foodies.model.response.FoodCategoryResponse
+import com.codingtroops.foodies.model.response.MealsResponse
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesContract
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesViewModel
 import com.google.common.truth.Truth
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.*
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
-import org.mockito.MockitoAnnotations
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FoodCategoriesViewModelTest2 {
 
-    private val dispatcher = UnconfinedTestDispatcher()
+    private val dispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
 
     @Test
     fun testSuccessState() = scope.runTest {
-        val viewModel = FoodCategoriesViewModel(
-            FakeRestaurantsRepository { TestConstants.restaurants },
-            SavedStateHandle(),
-            dispatcher
-        )
+        val viewModel = constructSUT {
+            return@constructSUT TestConstants.foodCategoriesResponse
+        }
+
         // Test initial state
         Truth.assertThat(viewModel.state.value).isEqualTo(
             FoodCategoriesContract.State(
@@ -42,40 +39,68 @@ class FoodCategoriesViewModelTest2 {
         // Test success state
         Truth.assertThat(viewModel.state.value).isEqualTo(
             FoodCategoriesContract.State(
-                categories = TestConstants.restaurants,
+                categories = TestConstants.expectedItems,
                 isLoading = false
             )
         )
     }
-//
-//    @Test
-//    fun testError() = runTest {
-//        val viewModel = FoodCategoriesViewModel(
-//            FakeRestaurantsRepository { throw Throwable(TestConstants.repoError) },
-//            SavedStateHandle()
-//        )
-//        advanceUntilIdle()
-//
-//        // Test error state
-//        Truth.assertThat(viewModel.state.value).isEqualTo(
-//            FoodCategoriesContract.State(
-//                categories = emptyList(),
-//                isLoading = false,
-//                error = TestConstants.repoError
-//            )
-//        )
-//    }
+
+    @Test
+    fun testError() = scope.runTest {
+        val viewModel = constructSUT {
+            throw Exception(TestConstants.errorMessage)
+        }
+        advanceUntilIdle()
+
+        // Test error state
+        Truth.assertThat(viewModel.state.value).isEqualTo(
+            FoodCategoriesContract.State(
+                categories = emptyList(),
+                isLoading = false,
+                error = TestConstants.errorMessage
+            )
+        )
+    }
+
+    private fun constructSUT(content: () -> FoodCategoriesResponse): FoodCategoriesViewModel {
+        val fakeAPI = FakeItemsAPI()
+        fakeAPI.setContentToReturn { content() }
+        return FoodCategoriesViewModel(
+            GetFoodItemsUSeCase(FoodMenuRepository(fakeAPI, dispatcher)),
+            SavedStateHandle(),
+            dispatcher
+        )
+    }
+
 }
 
-class FakeRestaurantsRepository(private val content: () -> List<FoodItem>) : FoodMenuRepositoryContract {
-    override suspend fun getFoodCategories(): List<FoodItem> {
-        delay(300)
+class FakeItemsAPI : IFoodMenuApi {
+    private lateinit var content: () -> FoodCategoriesResponse
+
+    fun setContentToReturn(content: () -> FoodCategoriesResponse) {
+        this.content = content
+    }
+
+    override suspend fun getFoodCategories(): FoodCategoriesResponse {
+        delay(1000)
         return content()
+    }
+
+    override suspend fun getMealsByCategory(categoryId: String): MealsResponse {
+        TODO("Not yet implemented")
     }
 }
 
 object TestConstants {
-    val restaurants = listOf(
+    private val mockItems = listOf(
+        FoodCategoryResponse(
+            "id",
+            "name",
+            "thumbURL",
+            "description"
+        )
+    )
+    val expectedItems = listOf(
         FoodItem(
             "id",
             "name",
@@ -84,5 +109,7 @@ object TestConstants {
         )
     )
 
-    const val repoError = "Retrieval failed"
+    val foodCategoriesResponse = FoodCategoriesResponse(mockItems)
+
+    const val errorMessage = "Retrieval failed"
 }
