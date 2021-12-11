@@ -20,6 +20,7 @@ class GetFoodItemsUSeCase(private val repository: FoodMenuRepository) {
 
 @Singleton
 open class FoodMenuRepository @Inject constructor(private val foodMenuApi: IFoodMenuApi,
+                                                  private val foodDao: FoodDao,
                                                   @IoDispatcher private val dispatcher: CoroutineDispatcher) {
 
     private var cachedCategories: List<FoodItem>? = null
@@ -29,6 +30,7 @@ open class FoodMenuRepository @Inject constructor(private val foodMenuApi: IFood
             var cachedCategories = cachedCategories
             if (cachedCategories == null) {
                 cachedCategories = foodMenuApi.getFoodCategories().mapCategoriesToItems()
+                foodDao.addAll(cachedCategories)
                 this@FoodMenuRepository.cachedCategories = cachedCategories
             }
             return@withContext cachedCategories

@@ -66,7 +66,7 @@ class FoodCategoriesViewModelTest2 {
         val fakeAPI = FakeItemsAPI()
         fakeAPI.setContentToReturn { content() }
         return FoodCategoriesViewModel(
-            GetFoodItemsUSeCase(FoodMenuRepository(fakeAPI, dispatcher)),
+            GetFoodItemsUSeCase(FoodMenuRepository(fakeAPI, FakeFoodDao(), dispatcher)),
             SavedStateHandle(),
             dispatcher
         )
@@ -88,6 +88,15 @@ class FakeItemsAPI : IFoodMenuApi {
 
     override suspend fun getMealsByCategory(categoryId: String): MealsResponse {
         TODO("Not yet implemented")
+    }
+}
+
+class FakeFoodDao : FoodDao {
+    private var items = listOf<FoodItem>()
+    override suspend fun getAll() = items
+
+    override suspend fun addAll(newItems: List<FoodItem>) {
+        items = (items + newItems).distinctBy { it.id }
     }
 }
 

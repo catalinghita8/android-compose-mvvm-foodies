@@ -20,10 +20,12 @@ class FoodMenuRepositoryTest {
 
     @Test
     fun testSuccessState() = scope.runTest {
-        val repo = FoodMenuRepository(FakeApi(), dispatcher)
+        val fakeDao = FakeFoodDao()
+        val repo = FoodMenuRepository(FakeApi(), fakeDao, dispatcher)
         Truth.assertThat(repo.getFoodCategories()).isEqualTo(
-            foodItem
+            foodItems
         )
+        Truth.assertThat(fakeDao.getAll()).isEqualTo(foodItems)
     }
 }
 class FakeApi: IFoodMenuApi {
@@ -38,4 +40,4 @@ class FakeApi: IFoodMenuApi {
 }
 
 val dummyResponse = FoodCategoriesResponse(listOf(FoodCategoryResponse("s", "", "", "")))
-val foodItem = listOf(FoodItem("s", "", "", ""))
+val foodItems = listOf(FoodItem("s", "", "", ""))

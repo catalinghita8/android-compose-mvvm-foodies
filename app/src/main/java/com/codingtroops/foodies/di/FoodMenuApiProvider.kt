@@ -1,10 +1,13 @@
 package com.codingtroops.foodies.di
 
+import android.content.Context
+import androidx.room.Room
 import com.codingtroops.foodies.model.data.*
 import com.codingtroops.foodies.model.data.FoodMenuApi.Companion.API_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
@@ -26,8 +29,10 @@ class FoodMenuApiProvider {
 
     @Provides
     @Singleton
-    fun provideFoodMenuRepository(foodMenuApi: IFoodMenuApi, @IoDispatcher dispatcher: CoroutineDispatcher): FoodMenuRepository{
-        return FoodMenuRepository(foodMenuApi, dispatcher)
+    fun provideFoodMenuRepository(foodMenuApi: IFoodMenuApi,
+                                  @IoDispatcher dispatcher: CoroutineDispatcher,
+                                  roomDatabase: FoodDao): FoodMenuRepository{
+        return FoodMenuRepository(foodMenuApi, roomDatabase, dispatcher)
     }
 
     @Provides
@@ -40,6 +45,17 @@ class FoodMenuApiProvider {
     @Singleton
     fun provideFoodMenuApi(service: FoodMenuApi.Service, @IoDispatcher dispatcher: CoroutineDispatcher): IFoodMenuApi {
         return FoodMenuApi(service, dispatcher)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(@ApplicationContext context: Context): FoodDao {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            FoodDatabase::class.java,
+            "restaurants_database")
+            .build()
+            .dao
     }
 
     @Provides
