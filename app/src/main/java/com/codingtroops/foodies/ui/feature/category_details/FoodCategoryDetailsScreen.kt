@@ -81,7 +81,7 @@ private fun TimerValue(viewModel: FoodCategoryDetailsViewModel, shouldBeShown: B
 @Composable
 private fun TimerText(viewModel: FoodCategoryDetailsViewModel, timerValue: String) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(key1 = viewModel) {
+    DisposableEffect(key1 = LocalLifecycleOwner.current) {
         viewModel.startTimer()
         lifecycle.addObserver(viewModel.timer)
         onDispose {
