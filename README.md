@@ -32,7 +32,7 @@ The sample app layers its presentation through MVVM presentation pattern. Additi
     * [Android KTX](https://developer.android.com/kotlin/ktx) - Jetpack Kotlin extensions
 
 ## Presentation patterns layers
-* View - Composable screens that consume state, apply effects and delegate events.
+* View - Composable screens that consume state, apply effects and delegate events upstream.
 * ViewModel - [AAC ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) that manages and set the state of the corresponding screen. Additionally, it intercepts UI events as callbacks and produces side-effects. The ViewModel is scoped to the lifetime of the corresponding screen composable in the backstack.
 * Model - Data source classes that retrieve content. In a Clean architecture context, one could use UseCases or Interactors that tap into repositories or data sources directly.
 
@@ -43,7 +43,7 @@ As the presentation layer is defined with MVVM, there are a two core components 
 
 * **Effect** - plain object that signals one-time side-effect actions that should impact the UI e.g. triggering a navigation action, showing a Toast, SnackBar etc. Effects are exposed as `ChannelFlow` which behave as in each event is delivered to a single subscriber. An attempt to post an event without subscribers will suspend as soon as the channel buffer becomes full, waiting for a subscriber to appear.
 
-Every screen/flow defines its own contract class that states all corresponding core components described above: state content, events and effects.
+Every screen/flow defines its own contract class that states all corresponding core components described above: state content and effects.
 
 ### Dependency injection
 [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) is used for Dependency Injection as a wrapper on top of [Dagger](https://github.com/google/dagger). 
