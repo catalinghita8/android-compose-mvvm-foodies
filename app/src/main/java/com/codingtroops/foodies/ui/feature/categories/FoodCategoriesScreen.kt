@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,10 +21,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.codingtroops.foodies.R
-import com.codingtroops.foodies.base.LAUNCH_LISTEN_FOR_EFFECTS
 import com.codingtroops.foodies.model.FoodItem
 import com.codingtroops.foodies.noRippleClickable
 import com.codingtroops.foodies.ui.theme.ComposeSampleTheme
@@ -31,32 +32,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
-
+@ExperimentalCoilApi
 @Composable
 fun FoodCategoriesScreen(
     state: FoodCategoriesContract.State,
     effectFlow: Flow<FoodCategoriesContract.Effect>?,
-    onEventSent: (event: FoodCategoriesContract.Event) -> Unit,
-    onNavigationRequested: (navigationEffect: FoodCategoriesContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (itemId: String) -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
 
     // Listen for side effects from the VM
-    LaunchedEffect(LAUNCH_LISTEN_FOR_EFFECTS) {
+    LaunchedEffect(effectFlow) {
         effectFlow?.onEach { effect ->
-            when (effect) {
-                is FoodCategoriesContract.Effect.DataWasLoaded ->
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "Food categories are loaded.",
-                        duration = SnackbarDuration.Short
-                    )
-                is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails -> onNavigationRequested(
-                    effect
+            if (effect is FoodCategoriesContract.Effect.DataWasLoaded)
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = "Food categories are loaded.",
+                    duration = SnackbarDuration.Short
                 )
-            }
         }?.collect()
     }
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -65,7 +59,7 @@ fun FoodCategoriesScreen(
     ) {
         Box {
             FoodCategoriesList(foodItems = state.categories) { itemId ->
-                onEventSent(FoodCategoriesContract.Event.CategorySelection(itemId))
+                onNavigationRequested(itemId)
             }
             if (state.isLoading)
                 LoadingBar()
@@ -119,7 +113,7 @@ fun FoodItemRow(
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
             .clickable { onItemClicked(item.id) }
     ) {
-        var expanded by remember { mutableStateOf(false) }
+        var expanded by rememberSaveable { mutableStateOf(false) }
         Row(modifier = Modifier.animateContentSize()) {
             Box(modifier = Modifier.align(alignment = Alignment.CenterVertically)) {
                 FoodItemThumbnail(item.thumbnailUrl, iconTransformationBuilder)
@@ -220,6 +214,6 @@ fun LoadingBar() {
 @Composable
 fun DefaultPreview() {
     ComposeSampleTheme {
-        FoodCategoriesScreen(FoodCategoriesContract.State(), null, { }, { })
+        FoodCategoriesScreen(FoodCategoriesContract.State(), null, { })
     }
 }

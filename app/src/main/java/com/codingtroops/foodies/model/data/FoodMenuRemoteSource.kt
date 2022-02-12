@@ -3,28 +3,29 @@ package com.codingtroops.foodies.model.data
 import com.codingtroops.foodies.model.FoodItem
 import com.codingtroops.foodies.model.response.FoodCategoriesResponse
 import com.codingtroops.foodies.model.response.MealsResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FoodMenuRepository @Inject constructor(private val foodMenuApi: FoodMenuApi) {
+class FoodMenuRemoteSource @Inject constructor(private val foodMenuApi: FoodMenuApi) {
 
     private var cachedCategories: List<FoodItem>? = null
 
-    suspend fun getFoodCategories(): List<FoodItem> {
+    suspend fun getFoodCategories(): List<FoodItem> = withContext(Dispatchers.IO) {
         var cachedCategories = cachedCategories
         if (cachedCategories == null) {
             cachedCategories = foodMenuApi.getFoodCategories().mapCategoriesToItems()
-            this.cachedCategories = cachedCategories
+            this@FoodMenuRemoteSource.cachedCategories = cachedCategories
         }
-        return cachedCategories
+        return@withContext cachedCategories
     }
 
-    suspend fun getMealsByCategory(categoryId: String): List<FoodItem> {
+    suspend fun getMealsByCategory(categoryId: String) = withContext(Dispatchers.IO) {
         val categoryName = getFoodCategories().first { it.id == categoryId }.name
-        return foodMenuApi.getMealsByCategory(categoryName).mapMealsToItems()
+        return@withContext foodMenuApi.getMealsByCategory(categoryName).mapMealsToItems()
     }
-
 
     private fun FoodCategoriesResponse.mapCategoriesToItems(): List<FoodItem> {
         return this.categories.map { category ->

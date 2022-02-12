@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComposeSample">
         <activity
-            android:name="com.codingtroops.foodies.ui.feature.entry.EntryPointActivity"
+            android:name="com.codingtroops.foodies.ui.EntryPointActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ComposeSample.NoActionBar">

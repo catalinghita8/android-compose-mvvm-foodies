@@ -1,4 +1,4 @@
-package com.codingtroops.foodies.ui.feature.entry
+package com.codingtroops.foodies.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,12 +13,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.codingtroops.foodies.ui.feature.category_details.FoodCategoryDetailsScreen
 import com.codingtroops.foodies.ui.feature.category_details.FoodCategoryDetailsViewModel
-import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesContract
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesScreen
 import com.codingtroops.foodies.ui.feature.categories.FoodCategoriesViewModel
-import com.codingtroops.foodies.ui.feature.entry.NavigationKeys.Arg.FOOD_CATEGORY_ID
+import com.codingtroops.foodies.ui.NavigationKeys.Arg.FOOD_CATEGORY_ID
 import com.codingtroops.foodies.ui.theme.ComposeSampleTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.receiveAsFlow
 
 
 // Single Activity per app
@@ -57,23 +57,18 @@ private fun FoodApp() {
 @Composable
 private fun FoodCategoriesDestination(navController: NavHostController) {
     val viewModel: FoodCategoriesViewModel = hiltViewModel()
-    val state = viewModel.viewState.value
     FoodCategoriesScreen(
-        state = state,
-        effectFlow = viewModel.effect,
-        onEventSent = { event -> viewModel.setEvent(event) },
-        onNavigationRequested = { navigationEffect ->
-            if (navigationEffect is FoodCategoriesContract.Effect.Navigation.ToCategoryDetails) {
-                navController.navigate("${NavigationKeys.Route.FOOD_CATEGORIES_LIST}/${navigationEffect.categoryName}")
-            }
+        state = viewModel.state,
+        effectFlow = viewModel.effects.receiveAsFlow(),
+        onNavigationRequested = { itemId ->
+            navController.navigate("${NavigationKeys.Route.FOOD_CATEGORIES_LIST}/${itemId}")
         })
 }
 
 @Composable
 private fun FoodCategoryDetailsDestination() {
     val viewModel: FoodCategoryDetailsViewModel = hiltViewModel()
-    val state = viewModel.viewState.value
-    FoodCategoryDetailsScreen(state)
+    FoodCategoryDetailsScreen(viewModel.state)
 }
 
 object NavigationKeys {
